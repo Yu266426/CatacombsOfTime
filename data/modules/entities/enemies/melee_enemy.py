@@ -55,8 +55,8 @@ class MeleeEnemy(Enemy, Registrable):
 
 		self.player_pos = entity_manager.get_entities_of_tag("player")[0].pos
 
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
-		self.shadow = pygbase.Shadow(self.pos, to_scaled(3.5)).link_pos(self.pos)
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
+		self.shadow = pygbase.Shadow(self.pos, to_scaled(3.5))
 
 	def added(self):
 		self.lighting_manager.add_shadow(self.shadow)
@@ -74,9 +74,9 @@ class MeleeEnemy(Enemy, Registrable):
 
 	def update(self, delta: float):
 		Enemy.update(self, delta)
+		self.state_manager.update(delta)
 
 		self.model.update(delta)
-		self.state_manager.update(delta)
 
 		self.flip_x = self.player_pos.x < self.pos.x
 		self.item_slot.flip_x = self.flip_x

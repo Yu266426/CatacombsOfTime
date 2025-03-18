@@ -8,7 +8,6 @@ class SharedEditorState:
 	def __init__(self, room: EditorRoom):
 		# UI
 		self.show_global_ui = True
-		self.on_global_ui = False
 
 		self.should_draw_tool = True
 

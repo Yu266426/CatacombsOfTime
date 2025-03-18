@@ -19,8 +19,8 @@ from data.modules.level.tile import Tile
 class Level:
 	def __init__(self, entity_manager: EntityManager, room_separation: int, wall_gap_radius: int):
 		self.entity_manager = entity_manager
-		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get_value("particle_manager")
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
+		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get("particle_manager")
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
 
 		# TODO: Rework to separate tiles from rooms
 		# A game room is responsible for its location, loading the tiles, and special tiles

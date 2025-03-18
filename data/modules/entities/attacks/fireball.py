@@ -23,13 +23,24 @@ class Fireball(Entity):
 
 		self.level = level
 		self.entity_manager = entity_manager
-		self.particle_manager = pygbase.Common.get_value("particle_manager")
-		self.fire_particles = self.particle_manager.add_spawner(pygbase.CircleSpawner(self.pos, 0.05, 50, self.radius, True, "fire", self.particle_manager, linear_velocity_range=((0, self.movement.x / 4), (0, self.movement.y / 4))).link_pos(self.pos))
+		self.particle_manager = pygbase.Common.get("particle_manager")
+		self.fire_particles = self.particle_manager.add_spawner(
+			pygbase.CircleSpawner(
+				self.pos,
+				0.05,
+				50,
+				self.radius,
+				True,
+				"fire",
+				self.particle_manager,
+				linear_velocity_range=((0, self.movement.x / 4), (0, self.movement.y / 4))
+			)
+		)
 
-		self.lighting_manager = pygbase.Common.get_value("lighting_manager")
-		self.light = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, self.radius, self.radius / 8, 2, tint=(255, 0, 0)).link_pos(self.pos))
-		self.light2 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, self.radius * 2, self.radius / 7, 2, tint=(255, 0, 0)).link_pos(self.pos))
-		self.light3 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.2, self.radius * 3, self.radius / 6, 2, tint=(255, 0, 0)).link_pos(self.pos))
+		self.lighting_manager = pygbase.Common.get("lighting_manager")
+		self.light = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, self.radius, self.radius / 8, 2, tint=(255, 0, 0)))
+		self.light2 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, self.radius * 2, self.radius / 7, 2, tint=(255, 0, 0)))
+		self.light3 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.2, self.radius * 3, self.radius / 6, 2, tint=(255, 0, 0)))
 
 	def is_alive(self):
 		return self.alive

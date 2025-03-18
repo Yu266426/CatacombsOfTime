@@ -39,7 +39,7 @@
     "scale": 1,
     "rotatable": false
   },
-  "reload": {
+  "reload_button": {
     "rotatable": false,
     "scale": 5
   },

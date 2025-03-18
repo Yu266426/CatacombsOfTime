@@ -1,13 +1,14 @@
 import pygame
 import pygbase
+from pygbase.ui import *
 
-from data.modules.base.constants import PIXEL_SCALE, SCREEN_HEIGHT
-from data.modules.level.room import EditorRoom
+from data.modules.base.constants import PIXEL_SCALE, FRAME_BACKGROUND_COLOR, EDITOR_BUTTON_FRAME_HEIGHT, EDITOR_BUTTON_FRAME_PADDING, EDITOR_BUTTON_FRAME_GAP
 from data.modules.editor.actions.editor_actions import EditorActionQueue
 from data.modules.editor.editor_selection_info import ObjectSelectionInfo
 from data.modules.editor.editor_states.editor_state import EditorState, EditorStates
 from data.modules.editor.screens.object_selection_screen import ObjectSelectionScreen
 from data.modules.editor.shared_editor_state import SharedEditorState
+from data.modules.level.room import EditorRoom
 
 
 class ObjectSelectionState(EditorState):
@@ -22,20 +23,18 @@ class ObjectSelectionState(EditorState):
 			ObjectSelectionScreen(self.object_selection_info, ["rune_altar"], (32 * PIXEL_SCALE, 48 * PIXEL_SCALE), n_cols=5),
 		]
 
-		self.ui = pygbase.UIManager()
-		self.button_frame = self.ui.add_frame(pygbase.Frame((pygbase.UIValue(0, False), pygbase.UIValue(SCREEN_HEIGHT - 90)), (pygbase.UIValue(1, False), pygbase.UIValue(90)), bg_colour=(20, 20, 20, 150)))
-
-		self.button_frame.add_element(pygbase.Button(
-			(pygbase.UIValue(10), pygbase.UIValue(10)),
-			(pygbase.UIValue(0), pygbase.UIValue(70)),
-			"images",
-			"tile_set_button",
-			self.button_frame,
-			self.switch_screen,
-			callback_args=(0,)
-		))
-		for loop in range(1, len(self.object_screens)):
-			self.button_frame.add_element(pygbase.Button((pygbase.UIValue(10), pygbase.UIValue(10)), (pygbase.UIValue(0), pygbase.UIValue(70)), "images", "tile_set_button", self.button_frame, self.switch_screen, callback_args=(loop,)), align_with_previous=(False, True), add_on_to_previous=(True, False))
+		with Frame(size=(Grow(), Grow()), y_align=YAlign.BOTTOM) as self.ui:
+			with Frame(
+					size=(Grow(), EDITOR_BUTTON_FRAME_HEIGHT),
+					padding=Padding.all(EDITOR_BUTTON_FRAME_PADDING),
+					gap=EDITOR_BUTTON_FRAME_GAP,
+					bg_color=FRAME_BACKGROUND_COLOR,
+					can_interact=True,
+					blocks_mouse=True
+			):
+				for i in range(len(self.object_screens)):
+					with Button(self.switch_screen, (i,), size=(Fit(), Grow())):
+						Image("images/tile_set_button", size=(Fit(), Grow()))
 
 	def switch_screen(self, new_index: int):
 		self.object_screen_index = new_index
@@ -47,7 +46,7 @@ class ObjectSelectionState(EditorState):
 
 		self.ui.update(delta)
 
-		if self._shared_state.should_draw_tool and not self.ui.on_ui():
+		if self._shared_state.should_draw_tool:
 			self.object_screens[self.object_screen_index].update(delta)
 
 	def draw(self, screen: pygame.Surface):

@@ -2,9 +2,9 @@ import enum
 
 import pygame
 import pygbase
-import pygbase.ui.text
+from pygbase.ui import *
 
-from data.modules.base.constants import TILE_SIZE, SCREEN_WIDTH, SCREEN_HEIGHT
+from data.modules.base.constants import TILE_SIZE, SCREEN_HEIGHT, FRAME_BACKGROUND_COLOR, EDITOR_BUTTON_FRAME_HEIGHT, EDITOR_BUTTON_FRAME_PADDING, EDITOR_BUTTON_FRAME_GAP
 from data.modules.base.utils import get_tile_pos, draw_rect_outline
 from data.modules.editor.actions.editor_actions import EditorActionQueue
 from data.modules.editor.editor_selection_info import TileSelectionInfo
@@ -34,28 +34,29 @@ class TileDrawState(EditorState):
 		}
 
 		self.tiled_mouse_pos = get_tile_pos(self._shared_state.camera_controller.world_mouse_pos, (TILE_SIZE, TILE_SIZE))
-
-		self.layer_text = pygbase.ui.text.Text((SCREEN_WIDTH - 10, 7), "arial", 60, (200, 200, 200), text="1", use_sys=True, alignment=pygbase.UIAlignment.TOP_RIGHT)
-
 		self.tool_highlight_index = 0
 
-		self.ui = pygbase.UIManager()
+		with Frame(size=(Grow(), Grow()), layout=Layout.TOP_TO_BOTTOM) as self.ui:
+			with Frame(size=(Grow(), Grow()), padding=Padding.all(10), x_align=XAlign.RIGHT):
+				self.layer_text = Text("1", 60, (200, 200, 200))
 
-		self.button_frame = self.ui.add_frame(pygbase.Frame((pygbase.UIValue(0), pygbase.UIValue(SCREEN_HEIGHT - 90)), (pygbase.UIValue(1, False), pygbase.UIValue(90)), bg_colour=(20, 20, 20, 150)))
-		self.button_size = self.button_frame.add_element(pygbase.Button(
-			(pygbase.UIValue(10), pygbase.UIValue(10)),
-			(pygbase.UIValue(0), pygbase.UIValue(70)),
-			"images", "draw_tool_button",
-			self.button_frame, self.set_tool, callback_args=(TileTools.DRAW, 0)
-		)).size
-		self.button_frame.add_element(pygbase.Button(
-			(pygbase.UIValue(10), pygbase.UIValue(0)),
-			(pygbase.UIValue(0), pygbase.UIValue(70)),
-			"images", "draw_tool_button",
-			self.button_frame, self.set_tool, callback_args=(TileTools.FILL, 1)
-		), add_on_to_previous=(True, False), align_with_previous=(False, True))
+			with Frame(
+					size=(Grow(), EDITOR_BUTTON_FRAME_HEIGHT),
+					padding=Padding.all(EDITOR_BUTTON_FRAME_PADDING),
+					gap=EDITOR_BUTTON_FRAME_GAP,
+					bg_color=FRAME_BACKGROUND_COLOR,
+					can_interact=True,
+					blocks_mouse=True
+			):
+				with Button(self.set_tool, (TileTools.DRAW, 0), size=(Fit(), Grow())) as button:
+					Image("images/draw_tool_button", size=(Fit(), Grow()))
 
-		self.particle_manager = pygbase.Common.get_value("particle_manager")
+				with Button(self.set_tool, (TileTools.FILL, 1), size=(Fit(), Grow())):
+					Image("images/draw_tool_button", size=(Fit(), Grow()))
+
+		self.button_size = button.size
+
+		self.particle_manager = pygbase.Common.get("particle_manager")
 
 	def set_tool(self, new_tool: TileTools, index: int):
 		self.current_tool = new_tool
@@ -82,20 +83,30 @@ class TileDrawState(EditorState):
 
 		self.check_draw_layer()
 
-		if not self._shared_state.on_global_ui and not self.ui.on_ui():
-			self.tools[self.current_tool].update(self.tiled_mouse_pos, self.tile_selection_info)
+		self.tools[self.current_tool].update(self.tiled_mouse_pos, self.tile_selection_info)
 
 	def draw(self, screen: pygame.Surface):
 		draw_rect_outline(screen, (255, 255, 0), -self._shared_state.camera_controller.camera.pos, (self._room.n_cols * TILE_SIZE, self._room.n_rows * TILE_SIZE), 2)
 		self._room.draw(screen, self._shared_state.camera_controller.camera)
 
-		if not self._shared_state.on_global_ui and self._shared_state.should_draw_tool and not self.ui.on_ui():
+		if self._shared_state.should_draw_tool:
 			self.tools[self.current_tool].draw(screen, self._shared_state.camera_controller.camera, self.tiled_mouse_pos, self.tile_selection_info)
 
 		self.ui.draw(screen)
 
 		# Tool Selection Outline
-		pygame.draw.rect(screen, (47, 186, 224), (((self.button_size.x + 10) * self.tool_highlight_index + 10, SCREEN_HEIGHT - 80), self.button_size), width=2)
+		pygame.draw.rect(
+			screen,
+			(47, 186, 224),
+			(
+				(
+					(self.button_size.x + EDITOR_BUTTON_FRAME_PADDING) * self.tool_highlight_index + EDITOR_BUTTON_FRAME_GAP,
+					SCREEN_HEIGHT - self.button_size.y - EDITOR_BUTTON_FRAME_PADDING
+				),
+				self.button_size
+			),
+			width=2
+		)
 
 		self.layer_text.draw(screen)
 

@@ -18,10 +18,10 @@ class Torch(GameObject, Registrable):
 
 		offset = to_scaled(pygame.Vector2(0, -14.72))
 
-		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get_value("particle_manager")
+		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get("particle_manager")
 		self.fire = pygbase.CircleSpawner(self.pos + offset, 0.05, 3, to_scaled(3.2), True, "fire", self.particle_manager)
 
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
 		self.light = pygbase.Light(self.pos + offset, 0.3, to_scaled(8), to_scaled(0.8), random.uniform(1.7, 2.3), tint=(255, 225, 53))
 
 	def added(self):

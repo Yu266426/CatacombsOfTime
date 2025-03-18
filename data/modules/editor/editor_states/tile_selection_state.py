@@ -1,7 +1,8 @@
 import pygame
 import pygbase
+from pygbase.ui import *
 
-from data.modules.base.constants import SCREEN_HEIGHT
+from data.modules.base.constants import FRAME_BACKGROUND_COLOR, EDITOR_BUTTON_FRAME_HEIGHT, EDITOR_BUTTON_FRAME_PADDING, EDITOR_BUTTON_FRAME_GAP
 from data.modules.editor.actions.editor_actions import EditorActionQueue
 from data.modules.editor.editor_selection_info import TileSelectionInfo
 from data.modules.editor.editor_states.editor_state import EditorState, EditorStates
@@ -22,32 +23,18 @@ class TileSelectionState(EditorState):
 			SpriteSheetScreen(self.tile_selection_info, "walls")
 		]
 
-		self.ui = pygbase.UIManager()
-		self.button_frame = self.ui.add_frame(pygbase.Frame(
-			(pygbase.UIValue(0, False), pygbase.UIValue(SCREEN_HEIGHT - 90)),
-			(pygbase.UIValue(1, False), pygbase.UIValue(90)),
-			bg_colour=(20, 20, 20, 150)
-		))
-
-		self.button_frame.add_element(pygbase.Button(
-			(pygbase.UIValue(10), pygbase.UIValue(10)),
-			(pygbase.UIValue(0), pygbase.UIValue(70)),
-			"images",
-			"tile_set_button",
-			self.button_frame,
-			self.switch_screen,
-			callback_args=(0,)
-		))
-		for loop in range(1, len(self.sprite_sheets)):
-			self.button_frame.add_element(pygbase.Button(
-				(pygbase.UIValue(10), pygbase.UIValue(10)),
-				(pygbase.UIValue(0), pygbase.UIValue(70)),
-				"images",
-				"tile_set_button",
-				self.button_frame,
-				self.switch_screen,
-				callback_args=(loop,)
-			), align_with_previous=(False, True), add_on_to_previous=(True, False))
+		with Frame(size=(Grow(), Grow()), y_align=YAlign.BOTTOM) as self.ui:
+			with Frame(
+					size=(Grow(), EDITOR_BUTTON_FRAME_HEIGHT),
+					padding=Padding.all(EDITOR_BUTTON_FRAME_PADDING),
+					gap=EDITOR_BUTTON_FRAME_GAP,
+					bg_color=FRAME_BACKGROUND_COLOR,
+					can_interact=True,
+					blocks_mouse=True
+			):
+				for i in range(len(self.sprite_sheets)):
+					with Button(self.switch_screen, (i,), size=(Fit(), Grow())):
+						Image("images/tile_set_button", size=(Fit(), Grow()))
 
 	def switch_screen(self, new_index: int):
 		self.sprite_sheet_index = new_index
@@ -63,7 +50,7 @@ class TileSelectionState(EditorState):
 
 		self.ui.update(delta)
 
-		if self._shared_state.should_draw_tool and not self.ui.on_ui():
+		if self._shared_state.should_draw_tool:
 			self.sprite_sheets[self.sprite_sheet_index].update(delta)
 
 	def draw(self, screen: pygame.Surface):

@@ -21,15 +21,15 @@ class RuneAltar(GameObject, Registrable):
 
 		self.state = 0
 
-		self.dialogue_manager: pygbase.DialogueManager = pygbase.Common.get_value("dialogue_manager")
+		self.dialogue_manager: pygbase.DialogueManager = pygbase.Common.get("dialogue_manager")
 		self.dialogue_manager.add_node(pygbase.DialogueNode("rune_altar_start", "The altar shakes violently, and lights up..."))
 
 		offset = + to_scaled(pygame.Vector2(0, -28.16))
 
-		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get_value("particle_manager")
+		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get("particle_manager")
 		self.altar_flames = pygbase.CircleSpawner(self.pos + offset, 0.05, 8, to_scaled(4.8), True, "rune_altar", self.particle_manager)
 
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
 		self.light = pygbase.Light(self.pos + offset, 0.6, to_scaled(12.8), to_scaled(0.8), 0.5, tint=(0, 100, 255))
 
 		self.activate()

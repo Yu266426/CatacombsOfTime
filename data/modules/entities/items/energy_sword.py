@@ -34,8 +34,8 @@ class EnergySword(Item, Registrable):
 
 		self.level = level
 		self.entity_manager: EntityManager = entity_manager
-		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get_value("particle_manager")
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
+		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get("particle_manager")
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
 
 		self.attack_cooldown = pygbase.Timer(0.5, True, False)
 

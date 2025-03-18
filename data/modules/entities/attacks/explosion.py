@@ -12,13 +12,13 @@ class Explosion(Entity, tags=("damage",)):
 		self.collider = CircleCollider(self.pos, radius)
 		self.damage = damage
 
-		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get_value("particle_manager")
+		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get("particle_manager")
 		self.explosion_particles = self.particle_manager.add_spawner(pygbase.CircleSpawner(self.pos, 0.05, 150, radius, True, "fire", self.particle_manager, radial_velocity_range=(20, 400)))
 
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
-		self.light = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, radius, radius / 8, 30, tint=(255, 0, 0)).link_pos(self.pos))
-		self.light2 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, radius * 1.4, radius / 7, 30, tint=(255, 0, 0)).link_pos(self.pos))
-		self.light3 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.2, radius * 1.7, radius / 6, 30, tint=(255, 0, 0)).link_pos(self.pos))
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
+		self.light = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, radius, radius / 8, 30, tint=(255, 0, 0)))
+		self.light2 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, radius * 1.4, radius / 7, 30, tint=(255, 0, 0)))
+		self.light3 = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.2, radius * 1.7, radius / 6, 30, tint=(255, 0, 0)))
 
 		self.emit_timer = pygbase.Timer(0.1, False, False)
 		self.death_timer = pygbase.Timer(0.3, False, False)

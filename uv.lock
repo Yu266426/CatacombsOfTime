@@ -1,5 +1,23 @@
 version = 1
+revision = 1
 requires-python = ">=3.13"
+
+[[package]]
+name = "catacombs-of-time"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "pygame-ce" },
+    { name = "pygbase-engine" },
+    { name = "typing-extensions" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pygame-ce", specifier = ">=2.5.2" },
+    { name = "pygbase-engine", editable = "../pygbase" },
+    { name = "typing-extensions", specifier = ">=4.12.2" },
+]
 
 [[package]]
 name = "pygame-ce"
@@ -19,30 +37,13 @@ wheels = [
 [[package]]
 name = "pygbase-engine"
 version = "0.0.1"
-source = { directory = "../pygbase" }
+source = { editable = "../pygbase" }
 dependencies = [
     { name = "pygame-ce" },
 ]
 
 [package.metadata]
 requires-dist = [{ name = "pygame-ce", specifier = ">=2.5.2" }]
-
-[[package]]
-name = "themagicdungeon"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "pygame-ce" },
-    { name = "pygbase-engine" },
-    { name = "typing-extensions" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "pygame-ce", specifier = ">=2.5.2" },
-    { name = "pygbase-engine", directory = "../pygbase" },
-    { name = "typing-extensions", specifier = ">=4.12.2" },
-]
 
 [[package]]
 name = "typing-extensions"

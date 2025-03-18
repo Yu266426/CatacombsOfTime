@@ -12,9 +12,9 @@ class Lobby(pygbase.GameState, name="lobby"):
 		super().__init__()
 
 		self.entity_manager = EntityManager()
-		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get_value("particle_manager")
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
-		self.dialogue_manager: pygbase.DialogueManager = pygbase.Common.get_value("dialogue_manager")
+		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get("particle_manager")
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
+		self.dialogue_manager: pygbase.DialogueManager = pygbase.Common.get("dialogue_manager")
 
 		self.camera = pygbase.Camera()
 

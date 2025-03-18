@@ -2,7 +2,6 @@ import random
 from typing import TYPE_CHECKING
 
 import pygame
-import pygbase
 
 from data.modules.base.constants import PIXEL_SCALE
 from data.modules.base.registry.registrable import Registrable

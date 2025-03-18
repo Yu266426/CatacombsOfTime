@@ -38,10 +38,10 @@ class Player(Entity, tags=("player",)):
 
 		self.camera = camera
 
-		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get_value("lighting_manager")
-		self.light = pygbase.Light(self.pos, 0.2, 300, 10, 1.2).link_pos(self.pos)
-		self.light2 = pygbase.Light(self.pos, 0.5, 500, 20, 1.2).link_pos(self.pos)
-		self.shadow = pygbase.Shadow(self.pos, to_scaled(3.26)).link_pos(self.pos)
+		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
+		self.light = pygbase.Light(self.pos, 0.2, 300, 10, 1.2)
+		self.light2 = pygbase.Light(self.pos, 0.5, 500, 20, 1.2)
+		self.shadow = pygbase.Shadow(self.pos, to_scaled(3.26))
 
 		self.interaction_controller = InteractionController(40, self)
 

@@ -78,9 +78,9 @@ if __name__ == '__main__':
 	pygbase.add_image_resource("images", 1, str(IMAGE_DIR), default_scale=PIXEL_SCALE)
 	pygbase.add_sprite_sheet_resource("sprite_sheets", 2, str(SPRITE_SHEET_DIR), default_scale=PIXEL_SCALE)
 
-	pygbase.Common.set_value("particle_manager", pygbase.ParticleManager())
-	pygbase.Common.set_value("lighting_manager", pygbase.LightingManager(0.3, 0.4))
-	pygbase.Common.set_value("dialogue_manager", pygbase.DialogueManager(15, 0.05))
+	pygbase.Common.set("particle_manager", pygbase.ParticleManager())
+	pygbase.Common.set("lighting_manager", pygbase.LightingManager(0.3, 0.4))
+	pygbase.Common.set("dialogue_manager", pygbase.DialogueManager(15, 0.05, "images/button"))
 
 	pygbase.add_particle_setting(
 		"fire",

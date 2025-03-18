@@ -33,7 +33,9 @@ class Fireball(Entity):
 				True,
 				"fire",
 				self.particle_manager,
-				linear_velocity_range=((0, self.movement.x / 4), (0, self.movement.y / 4))
+				spawn_velocity=self.movement / 4,
+				radial_velocity_range=(-30, 80),
+				# linear_velocity_range=((0, self.movement.x / 4), (0, self.movement.y / 4))
 			)
 		)
 

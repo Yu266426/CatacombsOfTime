@@ -83,7 +83,7 @@ class Player(Entity, tags=("player",)):
 					continue
 
 				# TODO: Is NoQA really the answer?
-				if self.collider.collides_with(entity.collider):  # NoQA
+				if self.collider.collides_with(entity.collider):
 					# print(entity)
 					self.health.damage(entity.damage)  # NoQA
 
@@ -117,7 +117,7 @@ class Player(Entity, tags=("player",)):
 				to_scaled(128),
 				min(400, self.pos.distance_to(mouse_world_pos)),
 				30,
-				70,
+				90,
 				10,
 				self.level,
 				self.entity_manager

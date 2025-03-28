@@ -3,6 +3,7 @@ import logging
 import pygame
 import pygbase
 
+from data.modules import magic
 from data.modules.base.constants import PIXEL_SCALE, SCREEN_WIDTH, SCREEN_HEIGHT
 from data.modules.base.paths import IMAGE_DIR, SPRITE_SHEET_DIR
 from data.modules.base.registry.registry import Registry
@@ -16,6 +17,7 @@ from data.modules.entities.models.model_part import ImageModelPart
 from data.modules.entities.states.melee_attack_state import MeleeAttackState
 from data.modules.entities.states.stunned_state import StunnedState
 from data.modules.entities.states.wander_state import WanderState
+from data.modules.game_states.game import Game
 from data.modules.game_states.main_menu import MainMenu
 from data.modules.objects.altars import RuneAltar
 from data.modules.objects.object_loader import ObjectLoader
@@ -54,10 +56,7 @@ def toggle_debug(event: pygame.Event):
 		pygbase.Debug.toggle()
 
 
-if __name__ == '__main__':
-	# profiler = cProfile.Profile()
-	# profiler.enable()
-
+def main():
 	pygbase.init((SCREEN_WIDTH, SCREEN_HEIGHT), logging_level=logging.DEBUG, rotate_resolution=2, light_radius_interval=3, shadow_ratio=1.6)
 	# pygbase.Debug.show()
 
@@ -107,19 +106,28 @@ if __name__ == '__main__':
 	# Run app
 	app = pygbase.App(
 		MainMenu,
-		# Game,,
+		# Game,
 		"Catacombs of Time",
 		run_on_load_complete=(
 			Registry.init,
 			register_types,
 			ObjectLoader.init,
 			ModelLoader.init,
-			EnemyLoader.init
+			EnemyLoader.init,
+			magic.load
 		)
 	)
 	app.run()
 
 	pygbase.quit()
 
-# profiler.disable()
-# profiler.dump_stats("stats.prof")
+
+if __name__ == '__main__':
+	# profiler = cProfile.Profile()
+	# profiler.enable()
+
+	# main()
+	magic.test()
+
+	# profiler.disable()
+	# profiler.dump_stats("stats.prof")

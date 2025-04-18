@@ -1,21 +1,30 @@
 import math
-from typing import Literal
+from typing import Literal, Any, Type
 
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.entities.models.character_model import CharacterModel
 
 
-class HumanoidModel(CharacterModel, Registrable):
+class HumanoidModelData(RegistryData):
 	@staticmethod
 	def get_name() -> str:
 		return "humanoid"
 
 	@staticmethod
-	def get_required_component() -> tuple[tuple[str, type | str] | tuple[str, type, tuple[str, ...]], ...]:
-		return ("parts", tuple[str], ("body", "leg")),
+	def get_required_components() -> dict[str, Any]:
+		return {
+			"parts": ["body", "leg"],
+		}
+
+
+class HumanoidModel(CharacterModel, Registrable):
+	@staticmethod
+	def get_registry_data() -> Type[RegistryData]:
+		return HumanoidModelData
 
 	def __init__(self, pos: pygame.Vector2, data: dict):
 		# TODO: So many pitfalls here, revise to be safer (although deepcopy is too slow).

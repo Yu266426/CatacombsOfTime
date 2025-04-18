@@ -13,7 +13,7 @@ from data.modules.base.utils import one_if_even, get_tile_pos
 from data.modules.entities.entity_manager import EntityManager
 from data.modules.level.battle import Battle
 from data.modules.level.tile import Tile
-from data.modules.objects.game_object import GameObject
+from data.modules.objects.base.game_object import GameObject
 from data.modules.objects.object_loader import ObjectLoader
 
 if TYPE_CHECKING:

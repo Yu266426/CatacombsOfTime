@@ -1,19 +1,30 @@
+from typing import Any, Type
+
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.entities.components.movement import Movement
 from data.modules.entities.states.entity_state import EntityState
 
 
-class StunnedState(EntityState, Registrable):
+class StunnedStateData(RegistryData):
 	@staticmethod
 	def get_name() -> str:
 		return "stunned"
 
 	@staticmethod
-	def get_required_component() -> tuple[tuple[str, type] | tuple[str, type, tuple[str, ...]], ...]:
-		return ("time", int),
+	def get_required_components() -> dict[str, Any]:
+		return {
+			"time": 0.0
+		}
+
+
+class StunnedState(EntityState, Registrable):
+	@staticmethod
+	def get_registry_data() -> Type[RegistryData]:
+		return StunnedStateData
 
 	def __init__(self, pos: pygame.Vector2, movement: Movement, after_state: str, data: dict[str, ...]):
 		self.timer = pygbase.Timer(data["time"], False, False)

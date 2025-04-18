@@ -1,8 +1,11 @@
-import pygame.typing
+from typing import Any, Type
 
+import pygame.typing
 import pygbase
+
 from data.modules.base.constants import PIXEL_SCALE
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled_sequence
 
 
@@ -10,14 +13,27 @@ class ModelPart:
 	pass
 
 
-class ImageModelPart(ModelPart, Registrable):
+class ImageModelPartData(RegistryData):
 	@staticmethod
 	def get_name() -> str:
-		return "static"
+		return "static_model"
 
 	@staticmethod
-	def get_required_component() -> tuple[tuple[str, type | str] | tuple[str, type, tuple[str, ...]], ...]:
-		return ("type", "static"), ("image", str), ("offset", "point"), ("pivot", "point"), ("parent", str), ("layer", int)
+	def get_required_components() -> dict[str, Any]:
+		return {
+			"type": "static",
+			"image": "",
+			"offset": [0, 0],
+			"pivot": [0, 0],
+			"parent": "",
+			"layer": 0
+		}
+
+
+class ImageModelPart(ModelPart, Registrable):
+	@staticmethod
+	def get_registry_data() -> Type[RegistryData]:
+		return ImageModelPartData
 
 	def __init__(self, parent_pos: pygame.Vector2, data: dict):
 		self._image: pygbase.Image = pygbase.Resources.get_resource("images", data["image"])

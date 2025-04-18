@@ -1,17 +1,26 @@
 import random
+from typing import Type
 
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
-from data.modules.objects.game_object import GameObject
+from data.modules.objects.base.game_object import GameObject
+from data.modules.objects.base.game_object_data import GameObjectData
+
+
+class TorchData(GameObjectData):
+	@staticmethod
+	def get_name() -> str:
+		return "torch"
 
 
 class Torch(GameObject, Registrable):
 	@staticmethod
-	def get_name() -> str:
-		return "torch"
+	def get_registry_data() -> Type[RegistryData]:
+		return TorchData
 
 	def __init__(self, pos: tuple, use_pixel: bool):
 		GameObject.__init__(self, "torch", pos, use_pixel, pygbase.Resources.get_resource("sprite_sheets", "objects").get_image(1))

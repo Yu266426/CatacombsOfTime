@@ -1,6 +1,6 @@
 from data.modules.level.room import EditorRoom
 from data.modules.editor.actions.editor_actions import EditorAction
-from data.modules.objects.game_object import GameObject
+from data.modules.objects.base.game_object import GameObject
 
 
 class PlaceObjectAction(EditorAction):

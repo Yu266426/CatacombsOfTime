@@ -1,16 +1,11 @@
 from abc import ABC, abstractmethod
+from typing import Type
+
+from data.modules.base.registry.registry_data import RegistryData
 
 
 class Registrable(ABC):
 	@staticmethod
 	@abstractmethod
-	def get_name() -> str:
-		pass
-
-	@staticmethod
-	def get_required_component() -> tuple[tuple[str, type | str] | tuple[str, type, tuple[str, ...]], ...]:
-		return ()
-
-	@staticmethod
-	def get_is_data():
-		return False
+	def get_registry_data() -> Type[RegistryData]:
+		raise NotImplementedError("`get_registry_data` must be defined for Registrable")

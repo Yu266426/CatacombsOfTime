@@ -1,7 +1,10 @@
+from typing import Any, Type
+
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
 from data.modules.entities.attacks.sword_swing import SwordSwing
 from data.modules.entities.entity_manager import EntityManager
@@ -9,10 +12,20 @@ from data.modules.entities.items.item import Item
 from data.modules.level.level import Level
 
 
-class EnergySword(Item, Registrable):
+class EnergySwordData(RegistryData):
 	@staticmethod
 	def get_name() -> str:
 		return "energy_sword"
+
+	@staticmethod
+	def get_required_components() -> dict[str, Any]:
+		return {}
+
+
+class EnergySword(Item, Registrable):
+	@staticmethod
+	def get_registry_data() -> Type[RegistryData]:
+		return EnergySwordData
 
 	def __init__(self, entity_manager: EntityManager, level: Level):
 		super().__init__(100)

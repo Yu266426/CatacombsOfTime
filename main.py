@@ -6,6 +6,7 @@ import pygbase
 from data.modules import magic
 from data.modules.base.constants import PIXEL_SCALE, SCREEN_WIDTH, SCREEN_HEIGHT
 from data.modules.base.paths import IMAGE_DIR, SPRITE_SHEET_DIR
+from data.modules.base.registry.sprite_data import AnimationData
 from data.modules.base.registry.registry import Registry
 from data.modules.base.utils import to_scaled_sequence
 from data.modules.entities.enemies.enemy_loader import EnemyLoader
@@ -20,12 +21,17 @@ from data.modules.entities.states.wander_state import WanderState
 from data.modules.game_states.game import Game
 from data.modules.game_states.main_menu import MainMenu
 from data.modules.objects.altars import RuneAltar
+from data.modules.objects.base.game_object_data import GameObjectData
 from data.modules.objects.object_loader import ObjectLoader
 from data.modules.objects.torch import Torch
 
 
 def register_types():
+	logging.info("Registering Data")
+	Registry.register_type(AnimationData)
+
 	logging.info("Registering objects")
+	Registry.register_type(GameObjectData)
 	Registry.register_type(Torch)
 	Registry.register_type(RuneAltar)
 
@@ -109,12 +115,11 @@ def main():
 		# Game,
 		"Catacombs of Time",
 		run_on_load_complete=(
-			Registry.init,
 			register_types,
 			ObjectLoader.init,
 			ModelLoader.init,
 			EnemyLoader.init,
-			magic.load
+			magic.load,
 		)
 	)
 	app.run()
@@ -126,8 +131,8 @@ if __name__ == '__main__':
 	# profiler = cProfile.Profile()
 	# profiler.enable()
 
-	# main()
-	magic.test()
+	main()
+# magic.test()
 
-	# profiler.disable()
-	# profiler.dump_stats("stats.prof")
+# profiler.disable()
+# profiler.dump_stats("stats.prof")

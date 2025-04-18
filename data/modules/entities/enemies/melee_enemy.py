@@ -1,7 +1,10 @@
+from typing import Any, Type
+
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
 from data.modules.entities.components.item_slot import ItemSlot
 from data.modules.entities.enemies.enemy import Enemy
@@ -16,19 +19,25 @@ from data.modules.entities.states.wander_state import WanderState
 from data.modules.level.level import Level
 
 
-class MeleeEnemy(Enemy, Registrable):
+class MeleeEnemyData(RegistryData):
 	@staticmethod
 	def get_name() -> str:
 		return "melee"
 
 	@staticmethod
-	def get_required_component() -> tuple[tuple[str, type | str] | tuple[str, type, tuple[str, ...]], ...]:
-		return (
-			("model", str),
-			("states", tuple[EntityState], ("wander", "stunned", "melee_attack")),
-			("item_offset", "point"),
-			("weapon", str)
-		)
+	def get_required_components() -> dict[str, Any]:
+		return {
+			"model": "",
+			"states": ["wander", "stunned", "melee_attack"],
+			"item_offset": [0, 0],
+			"weapon": ""
+		}
+
+
+class MeleeEnemy(Enemy, Registrable):
+	@staticmethod
+	def get_registry_data() -> Type[RegistryData]:
+		return MeleeEnemyData
 
 	def __init__(
 			self,

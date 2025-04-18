@@ -77,7 +77,7 @@ class ModelLoader(Loader):
 	def create_model(cls, model_name: str, pos: pygame.Vector2):
 		model_data = cls._model_data[model_name]
 
-		return Registry.get_type(model_data[0], CharacterModel)(
+		return Registry.get_type(model_data[0])(
 			pos,
 			model_data[1]
 		)

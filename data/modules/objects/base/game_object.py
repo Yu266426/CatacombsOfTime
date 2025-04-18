@@ -1,6 +1,5 @@
 import pygame
 import pygbase
-from pygbase import Camera
 
 from data.modules.base.constants import TILE_SIZE
 from data.modules.entities.entity import Entity
@@ -39,8 +38,6 @@ class GameObject(Entity, tags=("object",)):
 			self.hitbox: pygame.Rect = custom_hitbox
 			self.hitbox.midbottom = self.pos
 
-		self.is_editor_object = is_editor_object
-
 	def added(self):
 		pass
 
@@ -58,7 +55,7 @@ class GameObject(Entity, tags=("object",)):
 	def update(self, delta: float):
 		self.animate(delta)
 
-	def draw(self, surface: pygame.Surface, camera: Camera, flags=0):
+	def draw(self, surface: pygame.Surface, camera: pygbase.Camera, flags=0):
 		if self.is_animated:
 			self.sprite.draw_at_pos(surface, self.pos, camera, draw_pos="midbottom", flags=flags)
 		else:

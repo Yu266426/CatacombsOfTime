@@ -1,16 +1,26 @@
+from typing import Type
+
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
 from data.modules.entities.entity import Entity
-from data.modules.objects.game_object import GameObject
+from data.modules.objects.base.game_object import GameObject
+from data.modules.objects.base.game_object_data import GameObjectData
+
+
+class RuneAlterData(GameObjectData):
+	@staticmethod
+	def get_name() -> str:
+		return "rune_altar"
 
 
 class RuneAltar(GameObject, Registrable):
 	@staticmethod
-	def get_name() -> str:
-		return "rune_altar"
+	def get_registry_data() -> Type[RegistryData]:
+		return RuneAlterData
 
 	def __init__(self, pos: tuple, use_pixel: bool):
 		self.inactive_image = pygbase.Resources.get_resource("sprite_sheets", "rune_altar").get_image(0)

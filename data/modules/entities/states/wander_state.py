@@ -1,10 +1,11 @@
 import random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Type
 
 import pygame
 
 from data.modules.base.constants import PIXEL_SCALE
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.entities.components.movement import Movement
 from data.modules.entities.entity_manager import EntityManager
 from data.modules.entities.models.humanoid_model import HumanoidModel
@@ -14,14 +15,23 @@ if TYPE_CHECKING:
 	from data.modules.level.level import Level
 
 
-class WanderState(EntityState, Registrable):
+class WanderStateData(RegistryData):
 	@staticmethod
 	def get_name() -> str:
 		return "wander"
 
 	@staticmethod
-	def get_required_component() -> tuple[tuple[str, type] | tuple[str, type, tuple[str, ...]], ...]:
-		return ("range", int), ("detection_radius", int)
+	def get_required_components() -> dict[str, Any]:
+		return {
+			"range": 0,
+			"detection_radius": 0
+		}
+
+
+class WanderState(EntityState, Registrable):
+	@staticmethod
+	def get_registry_data() -> Type[RegistryData]:
+		return WanderStateData
 
 	def __init__(
 			self,

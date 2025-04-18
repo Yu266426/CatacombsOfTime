@@ -1,4 +1,4 @@
-from data.modules.objects.game_object import GameObject
+from data.modules.objects.base.game_object import GameObject
 
 
 # TODO: Finish

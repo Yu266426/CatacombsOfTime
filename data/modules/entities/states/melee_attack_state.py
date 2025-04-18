@@ -1,11 +1,12 @@
 import random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Type
 
 import pygame
 import pygbase.utils
 
 from data.modules.base.constants import PIXEL_SCALE
 from data.modules.base.registry.registrable import Registrable
+from data.modules.base.registry.registry_data import RegistryData
 from data.modules.entities.attacks.sword_swing import SwordSwing
 from data.modules.entities.states.entity_state import EntityState
 
@@ -15,14 +16,24 @@ if TYPE_CHECKING:
 	from data.modules.entities.entity_manager import EntityManager
 
 
-class MeleeAttackState(EntityState, Registrable):
+class MeleeAttackStateData(RegistryData):
 	@staticmethod
 	def get_name() -> str:
 		return "melee_attack"
 
 	@staticmethod
-	def get_required_component() -> tuple[tuple[str, type] | tuple[str, type, tuple[str, ...]], ...]:
-		return ("max_radius", int), ("attack_cooldown", float), ("attack_range", int)
+	def get_required_components() -> dict[str, Any]:
+		return {
+			"max_radius": 0.0,
+			"attack_cooldown": 0.0,
+			"attack_range": 0
+		}
+
+
+class MeleeAttackState(EntityState, Registrable):
+	@staticmethod
+	def get_registry_data() -> Type[RegistryData]:
+		return MeleeAttackStateData
 
 	def __init__(
 			self,

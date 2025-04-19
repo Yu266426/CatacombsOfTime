@@ -290,15 +290,18 @@ class LevelGenerator:
 		self.battle_names: list[str] = []
 		self._load_battle_data()
 
-		# Room graph
+		## Room graph
+		# Room positions
 		self.rooms_to_generate: set[tuple[int, int]] = set()
+		# Room position -> connect room positions
 		self.connection_data: dict[tuple[int, int], list[tuple[int, int]]] = {}
+		# Rooms at the end of a path
 		self.end_rooms: list[tuple[int, int]] = []
+
 		self.room_queue: deque[tuple[tuple[int, int], int]] = deque()  # Position, depth
 
 		# Hallway graph
 		self.hallway_connections: dict[tuple[int, int], list[tuple[int, int]]] = {}
-		self.visited_connections: set[tuple[int, int]] = set()
 
 		# Rooms
 		self.generated_rooms: dict[tuple[int, int], str] = {}  # {room_pos: room_name}
@@ -442,22 +445,25 @@ class LevelGenerator:
 
 	def _generate_hallway_graph(self):
 		"""
-		Processes the connection_data graph to be one dimensional
+		Processes the connection_data graph to be one directional
 		"""
 
 		connection_graph_start = (0, 0)
 
 		connection_graph_queue = deque()
+		visited_connections: set[tuple[int, int]] = set()
+
 		connection_graph_queue.append(connection_graph_start)
-		self.visited_connections.add(connection_graph_start)
+		visited_connections.add(connection_graph_start)
 
 		while len(connection_graph_queue) > 0:
 			current = connection_graph_queue.popleft()
 
 			for connection in self.connection_data[current]:
-				if connection not in self.visited_connections:
+				if connection not in visited_connections:
 					self.hallway_connections.setdefault(current, []).append(connection)
-					self.visited_connections.add(connection)
+					self.hallway_connections.setdefault(connection, [])  # Used for minimap (but will be empty for end rooms)
+					visited_connections.add(connection)
 
 					connection_graph_queue.append(connection)
 

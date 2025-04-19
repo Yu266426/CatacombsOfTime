@@ -5,6 +5,7 @@ from data.modules.base.constants import SCREEN_WIDTH, SCREEN_HEIGHT, TILE_SIZE
 from data.modules.entities.entity_manager import EntityManager
 from data.modules.entities.player import Player
 from data.modules.level.level import Level, LevelGenerator
+from data.modules.ui.minimap import Minimap
 
 
 class Game(pygbase.GameState, name="game"):
@@ -17,12 +18,21 @@ class Game(pygbase.GameState, name="game"):
 		self.camera = pygbase.Camera(pos=(-SCREEN_WIDTH / 2, -SCREEN_HEIGHT / 2))
 
 		room_separation = 21
-		self.level: Level = LevelGenerator(20, self.entity_manager, room_separation, 1).generate_level()
+		level_generator = LevelGenerator(20, self.entity_manager, room_separation, 1)
+		self.level: Level = level_generator.generate_level()
 
 		self.player = Player(((int(room_separation / 2) + 0.5) * TILE_SIZE, room_separation / 2 * TILE_SIZE), self.camera, self.entity_manager, self.level)
 		self.entity_manager.add_entity(self.player)
 
 		self.camera.set_pos(self.player.pos + (-SCREEN_WIDTH / 2, -SCREEN_HEIGHT / 2))
+
+		self.minimap = Minimap(
+			(SCREEN_WIDTH - 300, 0),
+			(300, 300),
+			50,
+			15
+		).init(level_generator)
+		self.minimap.update_pos(self.player.pos)
 
 	def enter(self):
 		pygbase.Common.set("camera", self.camera)
@@ -57,10 +67,12 @@ class Game(pygbase.GameState, name="game"):
 			from data.modules.game_states.main_menu import MainMenu
 			self.set_next_state(MainMenu())
 
-	# pygbase.Events.post_event(pygame.QUIT)
+		self.minimap.update_pos(self.player.pos)
 
 	def draw(self, surface: pygame.Surface):
 		surface.fill((0, 0, 0))
 
 		self.level.draw(surface, self.camera)
 		self.particle_manager.draw(surface, self.camera)
+
+		self.minimap.draw(surface)

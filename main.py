@@ -6,6 +6,7 @@ import pygbase
 from data.modules import magic
 from data.modules.base.constants import PIXEL_SCALE, SCREEN_WIDTH, SCREEN_HEIGHT
 from data.modules.base.paths import IMAGE_DIR, SPRITE_SHEET_DIR
+from data.modules.base.profiler import save_profile_data
 from data.modules.base.registry.sprite_data import AnimationData
 from data.modules.base.registry.registry import Registry
 from data.modules.base.utils import to_scaled_sequence
@@ -111,8 +112,8 @@ def main():
 
 	# Run app
 	app = pygbase.App(
-		MainMenu,
-		# Game,
+		# MainMenu,
+		Game,
 		"Catacombs of Time",
 		run_on_load_complete=(
 			register_types,
@@ -128,11 +129,8 @@ def main():
 
 
 if __name__ == '__main__':
-	# profiler = cProfile.Profile()
-	# profiler.enable()
-
 	main()
-# magic.test()
+	# magic.test()
 
-# profiler.disable()
-# profiler.dump_stats("stats.prof")
+	save_profile_data("stats.prof")
+	pass

@@ -4,6 +4,8 @@ from pygbase.graphics.image import Image
 
 
 class Tile:
+	__slots__ = ["sprite_sheet_name", "image_index", "image", "rect"]
+
 	def __init__(self, sprite_sheet_name: str, image_index: int, pos: tuple | pygame.Vector2):
 		self.sprite_sheet_name = sprite_sheet_name
 		self.image_index = image_index

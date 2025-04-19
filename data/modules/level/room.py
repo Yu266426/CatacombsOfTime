@@ -57,9 +57,8 @@ class BaseRoom:
 
 	def remove_object(self, game_object: GameObject):
 		if game_object is not None:
-			# game_object.removed()
 			self.objects.remove(game_object)
-			self.entity_manager.add_entity_to_remove(game_object)
+			game_object.alive = False
 
 	def remove_objects(self):
 		for game_object in self.objects:

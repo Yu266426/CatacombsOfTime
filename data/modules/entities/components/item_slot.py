@@ -47,7 +47,7 @@ class ItemSlot:
 
 	def unequip_item(self):
 		if self.item is not None:
-			self.entity_manager.add_entity_to_remove(self.item)
+			self.item.alive = False
 			self.item = None
 
 	def use_item(self):

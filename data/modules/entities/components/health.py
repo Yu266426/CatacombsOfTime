@@ -1,4 +1,6 @@
 class Health:
+	__slots__ = ["_alive", "amount"]
+
 	def __init__(self, amount: int):
 		self._alive = True
 

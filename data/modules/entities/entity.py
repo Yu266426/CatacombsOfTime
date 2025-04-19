@@ -20,6 +20,8 @@ class Entity:
 
 		self.entity_tags = self.tags
 
+		self.alive = True
+
 	def added(self):
 		pass
 
@@ -42,4 +44,4 @@ class Entity:
 		pass
 
 	def is_alive(self):
-		return True
+		return self.alive

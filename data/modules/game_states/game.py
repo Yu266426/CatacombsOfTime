@@ -2,6 +2,7 @@ import pygame
 import pygbase
 
 from data.modules.base.constants import SCREEN_WIDTH, SCREEN_HEIGHT, TILE_SIZE
+from data.modules.base.profiler import profile
 from data.modules.entities.entity_manager import EntityManager
 from data.modules.entities.player import Player
 from data.modules.level.level import Level, LevelGenerator
@@ -45,6 +46,7 @@ class Game(pygbase.GameState, name="game"):
 		self.level.cleanup()
 		self.entity_manager.clear_entities()
 
+	# @profile
 	def update(self, delta: float):
 		self.entity_manager.update(delta)
 		self.particle_manager.update(delta)

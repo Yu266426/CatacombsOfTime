@@ -2,7 +2,7 @@ import pygame
 import pygbase
 from pygbase.ui import *
 
-from data.modules.base.constants import FRAME_BACKGROUND_COLOR
+from data.modules.base.constants import FRAME_BACKGROUND_COLOR, SCREEN_HEIGHT, SCREEN_WIDTH
 from data.modules.editor.actions.editor_actions import EditorActionQueue
 from data.modules.editor.editor_selection_info import TileSelectionInfo, ObjectSelectionInfo
 from data.modules.editor.editor_states.editor_state import EditorState, EditorStates
@@ -49,42 +49,22 @@ class Editor(pygbase.GameState, name="editor"):
 				blocks_mouse=True
 			)
 
-		self.show_overlay = False
+		with Frame(size=(Grow(), Grow()), x_align=XAlign.CENTER, y_align=YAlign.CENTER) as self.overlay_ui:
+			with Frame(size=(600, Fit()), layout=Layout.TOP_TO_BOTTOM, padding=Padding.all(20), gap=20, bg_color=FRAME_BACKGROUND_COLOR):
+				with Button(self.back_to_main_menu, size=(Grow(), Grow()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
+					with Image("images/button", size=(Grow(), Fit()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
+						Text("Back", 100, "white")
+				with Button(self.room.save):
+					with Image("images/button", size=(Grow(), Fit()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
+						Text("Save", 100, "white")
 
-	#
-	# self.overlay_ui = pygbase.UIManager()
-	# self.overlay_darken = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags=pygame.SRCALPHA)
-	# self.overlay_darken.fill((0, 0, 0, 50))
-	# self.overlay_frame = self.overlay_ui.add_frame(pygbase.Frame(
-	# 	(pygbase.UIValue(0.25, False), pygbase.UIValue(0.24, False)),
-	# 	(pygbase.UIValue(0.5, False), pygbase.UIValue(0.52, False)),
-	# 	bg_colour=(10, 10, 10, 200)
-	# ))
-	#
-	# self.overlay_frame.add_element(pygbase.Button(
-	# 	(pygbase.UIValue(0.5, False), pygbase.UIValue(0.02, False)),
-	# 	(pygbase.UIValue(0, False), pygbase.UIValue(0, False)),
-	# 	"images", "button",
-	# 	self.overlay_frame,
-	# 	self.back_to_main_menu,
-	# 	text="Menu", alignment="c"
-	# ))
-	# self.overlay_frame.add_element(pygbase.Button(
-	# 	(pygbase.UIValue(0.5, False), pygbase.UIValue(0.02, False)),
-	# 	(pygbase.UIValue(0, False), pygbase.UIValue(0, False)),
-	# 	"images", "button",
-	# 	self.overlay_frame,
-	# 	self.room.save,
-	# 	text="Save", alignment="c"
-	# ), align_with_previous=(True, False), add_on_to_previous=(False, True))
-	# self.overlay_frame.add_element(pygbase.Button(
-	# 	(pygbase.UIValue(0.5, False), pygbase.UIValue(0.02, False)),
-	# 	(pygbase.UIValue(0, False), pygbase.UIValue(0, False)),
-	# 	"images", "button",
-	# 	self.overlay_frame,
-	# 	pygbase.Events.post_event, callback_args=(pygame.QUIT,),
-	# 	text="Quit", alignment="c"
-	# ), align_with_previous=(True, False), add_on_to_previous=(False, True))
+				with Button(pygbase.Events.post_event, callback_args=(pygame.QUIT,), size=(Grow(), Grow()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
+					with Image("images/button", size=(Grow(), Fit()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
+						Text("Quit", 100, "white")
+
+		self.show_overlay = False
+		self.overlay_darken = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), flags=pygame.SRCALPHA)
+		self.overlay_darken.fill((0, 0, 0, 50))
 
 	def enter(self):
 		self.particle_manager.clear()

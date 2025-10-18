@@ -55,7 +55,7 @@ class Game(pygbase.GameState, name="game"):
 		self.camera.lerp_to_target(
 			self.player.collider.rect.center
 			- pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-			+ self.player.movement.velocity * 0.09
+			+ self.player.movement.velocity * 0.06
 			, 8 * (delta ** 0.95)
 		)
 		# self.camera.set_pos(

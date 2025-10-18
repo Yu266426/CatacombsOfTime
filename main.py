@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import pygame
 import pygbase
@@ -112,8 +113,8 @@ def main():
 
 	# Run app
 	app = pygbase.App(
-		# MainMenu,
-		Game,
+		MainMenu,
+		# Game,
 		"Catacombs of Time",
 		run_on_load_complete=(
 			register_types,
@@ -129,8 +130,10 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
-	# magic.test()
+	if "test" in sys.argv:
+		magic.run_tests()
+	else:
+		main()
 
 	save_profile_data("stats.prof")
 	pass

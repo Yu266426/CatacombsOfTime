@@ -1,24 +1,32 @@
-from typing import Type
+from typing import Type, OrderedDict
 
 
 class RunicPattern:
 	_runic_patterns: list[Type["RunicPattern"]] = []
 
-	_pattern: list[str]
+	def __init__(self, name: str, pattern: list[str]):
+		self._name = name
+		self._pattern = pattern
 
-	@classmethod
-	def load(cls):
-		cls._runic_patterns.append(FireballPattern)
-		cls._runic_patterns.append(TestPattern)
+	def __eq__(self, other) -> bool:
+		if isinstance(other, RunicPattern):
+			return self._name == other.name and self._pattern == other._pattern
+		elif isinstance(other, str):
+			return self._name == other
 
-		cls._runic_patterns.sort(key=lambda e: e.length())  # Sort from shortest to longest
+		raise TypeError(f"Cannot compare RunicPattern with {type(other)}")
 
-	@classmethod
-	def length(cls) -> int:
-		return len(cls._pattern)
+	def __repr__(self) -> str:
+		return f"{self.name}"
 
-	@classmethod
-	def search(cls, sequence: list[str], start_index: int) -> int | None:
+	@property
+	def name(self) -> str:
+		return self._name
+
+	def length(self) -> int:
+		return len(self._pattern)
+
+	def search(self, sequence: list[str], start_index: int) -> int | None:
 		"""
 		Returns first instance of pattern
 		:param sequence: List of magic
@@ -28,16 +36,18 @@ class RunicPattern:
 
 		sequence = sequence[start_index:]
 
-		if len(sequence) < cls.length():
+		length = self.length()
+
+		if len(sequence) < length:
 			return None
 
-		pattern = cls._pattern
+		pattern = self._pattern
 
-		for index, rune in enumerate(sequence[:-cls.length() + 1]):
+		for index, rune in enumerate(sequence[:-length + 1]):
 			# If first rune of pattern found
 			if rune == pattern[0]:
 				found = True
-				for i in range(1, cls.length()):
+				for i in range(1, length):
 					if sequence[index + i] != pattern[i]:
 						found = False
 
@@ -47,9 +57,25 @@ class RunicPattern:
 		return None
 
 
-class FireballPattern(RunicPattern):
-	_pattern = ["fire", "air", "fire", "air"]
+class RunicPatterns:
+	_patterns: dict[str, RunicPattern] = OrderedDict()
 
+	@classmethod
+	def add_pattern(cls, pattern: RunicPattern):
+		cls._patterns[pattern.name] = pattern
 
-class TestPattern(RunicPattern):
-	_pattern = ["fire", "water", "water", "air", "fire"]
+	@classmethod
+	def load(cls):
+		# TODO: Sort in some way?
+		cls.add_pattern(RunicPattern("fireball", ["fire", "air", "fire", "air"]))
+		cls.add_pattern(RunicPattern("test", ["fire", "water", "water", "air", "fire"]))
+
+	@classmethod
+	def search(cls, sequence: list[str], start_index: int) -> tuple[RunicPattern, int] | None:
+		for _, pattern in cls._patterns.items():
+			result = pattern.search(sequence, start_index)
+
+			if result is not None:
+				return pattern, result
+
+		return None

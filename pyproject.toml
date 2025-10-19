@@ -2,12 +2,11 @@
 name = "catacombs-of-time"
 version = "0.1.0"
 description = "Add your description here"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
-    "pygame-ce>=2.5.2",
+    "pygame-ce>=2.5.5",
     "pygbase-engine",
-    "setuptools>=78.1.0",
-    "typing-extensions>=4.12.2",
+    "typing-extensions"
 ]
 
 [tool.uv.sources]

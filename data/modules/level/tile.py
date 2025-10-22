@@ -1,10 +1,15 @@
-import pygame
-from pygbase import Resources, Camera
-from pygbase.graphics.image import Image
+from typing import TYPE_CHECKING
+
+from pygbase import Resources
+
+if TYPE_CHECKING:
+	import pygame
+	from pygbase import Camera
+	from pygbase.graphics.image import Image
 
 
 class Tile:
-	__slots__ = ["sprite_sheet_name", "image_index", "image", "rect"]
+	__slots__ = ["image", "image_index", "rect", "sprite_sheet_name"]
 
 	def __init__(self, sprite_sheet_name: str, image_index: int, pos: tuple | pygame.Vector2):
 		self.sprite_sheet_name = sprite_sheet_name

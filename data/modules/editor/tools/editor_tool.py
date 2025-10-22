@@ -1,15 +1,17 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
-import pygame
-from pygbase import Camera
+if TYPE_CHECKING:
+	import pygame
+	import pygbase
 
-from data.modules.level.room import EditorRoom
-from data.modules.editor.actions.editor_actions import EditorActionQueue
-from data.modules.editor.editor_selection_info import TileSelectionInfo, ObjectSelectionInfo
-from data.modules.editor.shared_editor_state import SharedEditorState
+	from data.modules.editor.actions.editor_actions import EditorActionQueue
+	from data.modules.editor.editor_selection_info import ObjectSelectionInfo, TileSelectionInfo
+	from data.modules.editor.shared_editor_state import SharedEditorState
+	from data.modules.level.room import EditorRoom
 
 
-class EditorTool:
+class EditorTool(ABC):
 	def __init__(self, room: EditorRoom, shared_state: SharedEditorState, action_queue: EditorActionQueue):
 		self._room = room
 		self._shared_state = shared_state
@@ -20,5 +22,5 @@ class EditorTool:
 		pass
 
 	@abstractmethod
-	def draw(self, screen: pygame.Surface, camera: Camera, mouse_tile_pos: tuple, selection_info: TileSelectionInfo | ObjectSelectionInfo):
+	def draw(self, screen: pygame.Surface, camera: pygbase.Camera, mouse_tile_pos: tuple, selection_info: TileSelectionInfo | ObjectSelectionInfo):
 		pass

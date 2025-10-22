@@ -1,8 +1,12 @@
-import pygame
+from typing import TYPE_CHECKING
+
 import pygbase
 
 from data.modules.base.constants import TILE_SIZE
 from data.modules.entities.entity import Entity
+
+if TYPE_CHECKING:
+	import pygame
 
 
 # TODO: Separate basic game object from base class (more subtypes, like how enemies work)
@@ -14,7 +18,7 @@ class GameObject(Entity, tags=("object",)):
 			use_pixel: bool,
 			sprite: pygbase.Image | pygbase.Animation,
 			custom_hitbox: pygame.Rect | None = None,
-			is_editor_object: bool = False
+			_is_editor_object: bool = False,
 	):
 		if use_pixel:
 			super().__init__(pos)

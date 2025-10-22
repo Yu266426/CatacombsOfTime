@@ -1,7 +1,7 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 
 
-class EditorAction:
+class EditorAction(ABC):
 	@abstractmethod
 	def execute(self):
 		pass
@@ -35,7 +35,7 @@ class EditorActionQueue:
 
 	def add_action(self, action: EditorAction | EditorActionBatch):
 		if self.action_index != len(self.editor_actions) - 1:
-			for index in range(len(self.editor_actions) - self.action_index - 1):
+			for _ in range(len(self.editor_actions) - self.action_index - 1):
 				self.editor_actions.pop()
 
 		self.editor_actions.append(action)
@@ -46,7 +46,7 @@ class EditorActionQueue:
 			self.action_index -= 1
 
 	def undo_action(self):
-		if 0 <= self.action_index:
+		if self.action_index >= 0:
 			self.editor_actions[self.action_index].undo()
 			self.action_index -= 1
 

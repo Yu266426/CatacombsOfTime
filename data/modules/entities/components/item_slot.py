@@ -1,12 +1,15 @@
-from typing import Optional
+from typing import TYPE_CHECKING
 
 import pygame
-import pygbase
 from pygbase.utils import get_angle_to
 
 from data.modules.base.utils import to_scaled
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.entities.items.item import Item
+
+if TYPE_CHECKING:
+	import pygbase
+
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.entities.items.item import Item
 
 
 class ItemSlot:
@@ -15,7 +18,7 @@ class ItemSlot:
 			pos: pygame.Vector2,
 			offset: tuple,
 			entities: EntityManager,
-			is_player: bool
+			is_player: bool,
 	):
 		self.pos = pos
 		self.offset = to_scaled(pygame.Vector2(offset))
@@ -24,7 +27,7 @@ class ItemSlot:
 		self.flip_x = False
 		self.item_flip_x = False
 
-		self.item: Optional[Item] = None
+		self.item: Item | None = None
 
 		self.entity_manager = entities
 

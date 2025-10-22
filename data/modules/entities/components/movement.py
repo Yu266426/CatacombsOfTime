@@ -4,14 +4,14 @@ import pygame
 
 from data.modules.base.constants import TILE_SIZE
 from data.modules.base.utils import get_1d_tile_pos, to_scaled
-from data.modules.entities.components.box_collider import BoxCollider
 
 if TYPE_CHECKING:
+	from data.modules.entities.components.box_collider import BoxCollider
 	from data.modules.level.level import Level
 
 
 class Movement:
-	def __init__(self, speed: float, drag: float, level: "Level", hitbox: BoxCollider):
+	def __init__(self, speed: float, drag: float, level: Level, hitbox: BoxCollider):
 		self.speed = to_scaled(speed)
 		self.drag = drag
 
@@ -31,7 +31,7 @@ class Movement:
 
 		pos.x += self.velocity.x * delta + 0.5 * acceleration.x * delta ** 2
 		hitbox = self.hitbox.rect
-		if 0 < self.velocity.x:
+		if self.velocity.x > 0:
 			top_right_tile = self.level.get_tile(hitbox.topright)
 			if top_right_tile:
 				pos.x = (get_1d_tile_pos(hitbox.x, TILE_SIZE) + 1) * TILE_SIZE - hitbox.width / 2 - 1
@@ -57,7 +57,7 @@ class Movement:
 
 		pos.y += self.velocity.y * delta + 0.5 * acceleration.y * delta ** 2
 		hitbox = self.hitbox.rect
-		if 0 < self.velocity.y:
+		if self.velocity.y > 0:
 			bottom_left_tile = self.level.get_tile(hitbox.bottomleft)
 			if bottom_left_tile:
 				pos.y = (get_1d_tile_pos(hitbox.y, TILE_SIZE) + 1) * TILE_SIZE - 1

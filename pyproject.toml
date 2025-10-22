@@ -11,3 +11,65 @@ dependencies = [
 
 [tool.uv.sources]
 pygbase-engine = { path = "../pygbase", editable = true }
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.1",
+]
+
+[tool.ruff]
+line-length = 160
+preview = true  # enables newer formatter behavior
+target-version = "py314"
+
+[tool.ruff.lint]
+# Core lint packs:
+# E/W = pycodestyle (incl. E3xx blank lines), F = pyflakes, I = import sort,
+# B = bugbear, N = naming, UP = pyupgrade, C90 = mccabe complexity,
+# SIM = simplify, PT = pytest-style, S = security (bandit subset),
+# T20 = print statements, ERA = commented-out code, ISC = implicit string concat,
+# ARG = unused args, RET = return issues, TCH = type-checking imports,
+# Q = quote consistency, RUF = Ruff-specific improvements
+select = [
+    "E", "W",
+    "F", "I", "B", "N", "UP", "C90", "SIM", "PT",
+    "S", "T20", "ERA", "ISC", "ARG", "RET", "TCH", "Q", "COM", "RUF"
+]
+
+# F:   Ignore * imports
+# W:   Tab for indent
+# ERA: Commented code
+# SIM: Combine with statements, combine if using and
+# T:   Print statements
+# S:   Not crytographical rngs, asserts
+ignore = [
+    "F403", "F405",
+    "W191",
+    "ERA001",
+    "SIM117", "SIM102",
+    "T201",
+    "S311", "S101"
+]
+
+# Let Ruff auto-fix anything it safely can on `ruff check --fix`
+fixable = ["ALL"]
+unfixable = []
+
+exclude = [
+    ".git", ".hg", ".mypy_cache", ".ruff_cache", ".venv", "venv",
+    "__pycache__", "build", "dist", "site-packages", "node_modules", "migrations"
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.flake8-type-checking]
+# Helps move heavy imports behind TYPE_CHECKING
+strict = true
+
+[tool.ruff.format]
+indent-style = "tab"
+quote-style = "double"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true

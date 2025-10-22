@@ -1,15 +1,18 @@
-from typing import Any, Type
+from typing import TYPE_CHECKING, Any
 
-import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
 from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
 from data.modules.entities.attacks.sword_swing import SwordSwing
-from data.modules.entities.entity_manager import EntityManager
 from data.modules.entities.items.item import Item
-from data.modules.level.level import Level
+
+if TYPE_CHECKING:
+	import pygame
+
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.level.level import Level
 
 
 class EnergySwordData(RegistryData):
@@ -24,14 +27,14 @@ class EnergySwordData(RegistryData):
 
 class EnergySword(Item, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return EnergySwordData
 
 	def __init__(self, entity_manager: EntityManager, level: Level):
 		super().__init__(100)
 
 		self.animations = pygbase.AnimationManager([
-			("active", pygbase.Animation("sprite_sheets", "energy_sword", 0, 1), 1)
+			("active", pygbase.Animation("sprite_sheets", "energy_sword", 0, 1), 1),
 		], "active")
 
 		self.starting_angle_offset = -60
@@ -54,7 +57,10 @@ class EnergySword(Item, Registrable):
 
 	def use(self):
 		if self.attack_cooldown.done():
-			self.entity_manager.add_entity(SwordSwing(self.pos, self.angle + (180 if self.flip_x else 0), self.attack_length, self.attack_damage, self.convert_flip()), tags=self.entity_tags)
+			self.entity_manager.add_entity(
+				SwordSwing(self.pos, self.angle + (180 if self.flip_x else 0), self.attack_length, self.attack_damage, self.convert_flip()),
+				tags=self.entity_tags,
+			)
 			self.attack_cooldown.start()
 
 			self.swinging_down = True
@@ -85,5 +91,5 @@ class EnergySword(Item, Registrable):
 			camera,
 			angle=draw_angle,
 			pivot_point=(0, 30),
-			draw_pos="midbottom"
+			draw_pos="midbottom",
 		)

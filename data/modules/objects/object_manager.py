@@ -1,4 +1,7 @@
-from data.modules.objects.base.game_object import GameObject
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from data.modules.objects.base.game_object import GameObject
 
 
 # TODO: Finish

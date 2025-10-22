@@ -3,6 +3,7 @@ import math
 import pygame
 import pygbase
 
+
 class LineCollider:
 	def __init__(self, start_pos: pygame.Vector2 | tuple[float, float], angle: float, length: float, start_offset: float = 0):
 		self.start_pos: pygame.Vector2 = pygame.Vector2(start_pos)
@@ -12,7 +13,7 @@ class LineCollider:
 
 		self.line = pygame.Vector2(0, -self.length).rotate(-self.angle)
 
-	def link_pos(self, pos: pygame.Vector2) -> "LineCollider":
+	def link_pos(self, pos: pygame.Vector2) -> LineCollider:
 		self.start_pos = pos
 		return self
 
@@ -116,23 +117,23 @@ class LineCollider:
 			if collider.rect.collidepoint(*self.end_pos):
 				return True
 
-			for line in collider.get_edge_lines():
-				if self.line_collide(line):
-					return True
-			return False
-		elif isinstance(collider, LineCollider):
+			return any(self.line_collide(line) for line in collider.get_edge_lines())
+		if isinstance(collider, LineCollider):
 			return self.line_collide(collider)
-		elif isinstance(collider, CircleCollider):
+		if isinstance(collider, CircleCollider):
 			if self.start_pos.distance_to(collider.pos) < collider.radius:
 				return True
 			if self.end_pos.distance_to(collider.pos) < collider.radius:
 				return True
 
-			dot = ((collider.pos.x - self.start_pos.x) * (self.end_pos.x - self.start_pos.x) + (collider.pos.y - self.start_pos.y) * (self.end_pos.y - self.start_pos.y)) / self.length ** 2
+			dot = (
+					(collider.pos.x - self.start_pos.x) * (self.end_pos.x - self.start_pos.x)
+					+ (collider.pos.y - self.start_pos.y) * (self.end_pos.y - self.start_pos.y)
+				) / self.length ** 2
 
 			closest_point = pygame.Vector2(
 				self.start_pos.x + dot * (self.end_pos.x - self.start_pos.x),
-				self.start_pos.y + dot * (self.end_pos.y - self.start_pos.y)
+				self.start_pos.y + dot * (self.end_pos.y - self.start_pos.y),
 			)
 
 			if not self.point_within_line_segment(closest_point):
@@ -140,5 +141,12 @@ class LineCollider:
 
 			return closest_point.distance_to(collider.pos) < collider.radius
 
+		return False
+
 	def draw_debug(self, camera: pygbase.Camera):
-		pygbase.Debug.draw_line(camera.world_to_screen(self.start_pos + self.line.normalize() * self.offset), camera.world_to_screen(self.start_pos + self.line), "yellow", width=4)
+		pygbase.Debug.draw_line(
+			camera.world_to_screen(self.start_pos + self.line.normalize() * self.offset),
+			camera.world_to_screen(self.start_pos + self.line),
+			"yellow",
+			width=4,
+		)

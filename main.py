@@ -5,11 +5,11 @@ import pygame
 import pygbase
 
 from data.modules import magic
-from data.modules.base.constants import PIXEL_SCALE, SCREEN_WIDTH, SCREEN_HEIGHT
+from data.modules.base.constants import PIXEL_SCALE, SCREEN_HEIGHT, SCREEN_WIDTH
 from data.modules.base.paths import IMAGE_DIR, SPRITE_SHEET_DIR
 from data.modules.base.profiler import save_profile_data
-from data.modules.base.registry.sprite_data import AnimationData
 from data.modules.base.registry.registry import Registry
+from data.modules.base.registry.sprite_data import AnimationData
 from data.modules.base.utils import to_scaled_sequence
 from data.modules.entities.enemies.enemy_loader import EnemyLoader
 from data.modules.entities.enemies.melee_enemy import MeleeEnemy
@@ -20,7 +20,6 @@ from data.modules.entities.models.model_part import ImageModelPart
 from data.modules.entities.states.melee_attack_state import MeleeAttackState
 from data.modules.entities.states.stunned_state import StunnedState
 from data.modules.entities.states.wander_state import WanderState
-from data.modules.game_states.game import Game
 from data.modules.game_states.main_menu import MainMenu
 from data.modules.objects.altars import RuneAltar
 from data.modules.objects.base.game_object_data import GameObjectData
@@ -97,7 +96,7 @@ def main():
 		to_scaled_sequence((0, 0.32)),
 		to_scaled_sequence((0, -16)),
 		False,
-		((0, 0), (0, 0))
+		((0, 0), (0, 0)),
 	)
 
 	pygbase.add_particle_setting(
@@ -108,7 +107,7 @@ def main():
 		to_scaled_sequence((0, 0.32)),
 		to_scaled_sequence((0, -16)),
 		False,
-		((0, 0), (0, 0))
+		((0, 0), (0, 0)),
 	)
 
 	# Run app
@@ -122,14 +121,14 @@ def main():
 			ModelLoader.init,
 			EnemyLoader.init,
 			magic.load,
-		)
+		),
 	)
 	app.run()
 
 	pygbase.quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 	if "test" in sys.argv:
 		magic.run_tests()
 	else:

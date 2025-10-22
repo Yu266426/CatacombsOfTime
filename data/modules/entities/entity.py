@@ -1,5 +1,9 @@
+from typing import TYPE_CHECKING
+
 import pygame
-import pygbase
+
+if TYPE_CHECKING:
+	import pygbase
 
 
 class Entity:
@@ -9,7 +13,7 @@ class Entity:
 		if "tags" in kwargs:
 			tags = kwargs["tags"]
 			if not isinstance(tags, tuple):
-				raise TypeError("\"tags\" argument in Entity subclass should by of type tuple[str, ...]")
+				raise TypeError('"tags" argument in Entity subclass should by of type tuple[str, ...]')
 
 			cls.tags = tags
 
@@ -28,7 +32,7 @@ class Entity:
 	def removed(self):
 		pass
 
-	def interact(self, other: "Entity"):
+	def interact(self, other: Entity):
 		pass
 
 	def enable(self):

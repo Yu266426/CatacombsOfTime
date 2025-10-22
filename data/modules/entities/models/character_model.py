@@ -1,10 +1,12 @@
 import logging
 from collections import deque
-
-import pygame
-import pygbase
+from typing import TYPE_CHECKING
 
 from data.modules.entities.models.model_part import ImageModelPart
+
+if TYPE_CHECKING:
+	import pygame
+	import pygbase
 
 
 class CharacterModel:
@@ -43,7 +45,7 @@ class CharacterModel:
 	def _part_sort_key(element) -> int:
 		return element[1].layer
 
-	def update(self, delta: float):
+	def update(self, _delta: float):
 		for part in self.parts.values():
 			part.update()
 

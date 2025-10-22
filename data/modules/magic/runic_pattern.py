@@ -1,8 +1,9 @@
-from typing import Type, OrderedDict
+from collections import OrderedDict
+from typing import ClassVar
 
 
 class RunicPattern:
-	_runic_patterns: list[Type["RunicPattern"]] = []
+	_runic_patterns: ClassVar[list[type[RunicPattern]]] = []
 
 	def __init__(self, name: str, pattern: list[str]):
 		self._name = name
@@ -11,7 +12,7 @@ class RunicPattern:
 	def __eq__(self, other) -> bool:
 		if isinstance(other, RunicPattern):
 			return self._name == other.name and self._pattern == other._pattern
-		elif isinstance(other, str):
+		if isinstance(other, str):
 			return self._name == other
 
 		raise TypeError(f"Cannot compare RunicPattern with {type(other)}")
@@ -58,7 +59,7 @@ class RunicPattern:
 
 
 class RunicPatterns:
-	_patterns: dict[str, RunicPattern] = OrderedDict()
+	_patterns: ClassVar[dict[str, RunicPattern]] = OrderedDict()
 
 	@classmethod
 	def add_pattern(cls, pattern: RunicPattern):

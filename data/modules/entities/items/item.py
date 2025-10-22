@@ -1,7 +1,10 @@
-import pygame
-from pygbase import Camera
+from typing import TYPE_CHECKING
 
 from data.modules.entities.entity import Entity
+
+if TYPE_CHECKING:
+	import pygame
+	from pygbase import Camera
 
 
 class Item(Entity, tags=("item",)):
@@ -9,7 +12,7 @@ class Item(Entity, tags=("item",)):
 		if "tags" in kwargs:
 			tags = kwargs["tags"]
 			if not isinstance(tags, tuple):
-				raise TypeError("\"tags\" argument in Item subclass should by of type tuple[str, ...]")
+				raise TypeError('"tags" argument in Item subclass should by of type tuple[str, ...]')
 
 			cls.tags = cls.tags + tags
 
@@ -27,8 +30,7 @@ class Item(Entity, tags=("item",)):
 	def check_durability(self):
 		if self.durability != -1:
 			return self.durability > 0
-		else:
-			return True
+		return True
 
 	def reduce_durability(self, amount):
 		if self.durability != -1:

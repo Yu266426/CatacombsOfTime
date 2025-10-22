@@ -1,17 +1,17 @@
 import random
-from typing import TYPE_CHECKING, Any, Type
+from typing import TYPE_CHECKING, Any
 
 import pygame
 
 from data.modules.base.constants import PIXEL_SCALE
 from data.modules.base.registry.registrable import Registrable
 from data.modules.base.registry.registry_data import RegistryData
-from data.modules.entities.components.movement import Movement
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.entities.models.humanoid_model import HumanoidModel
 from data.modules.entities.states.entity_state import EntityState
 
 if TYPE_CHECKING:
+	from data.modules.entities.components.movement import Movement
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.entities.models.humanoid_model import HumanoidModel
 	from data.modules.level.level import Level
 
 
@@ -24,23 +24,23 @@ class WanderStateData(RegistryData):
 	def get_required_components() -> dict[str, Any]:
 		return {
 			"range": 0,
-			"detection_radius": 0
+			"detection_radius": 0,
 		}
 
 
 class WanderState(EntityState, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return WanderStateData
 
 	def __init__(
-			self,
-			pos: pygame.Vector2,
-			movement: Movement,
-			level: "Level",
-			entity_manager: EntityManager,
-			model: HumanoidModel,
-			data: dict[str, ...]
+		self,
+		pos: pygame.Vector2,
+		movement: Movement,
+		level: Level,
+		entity_manager: EntityManager,
+		model: HumanoidModel,
+		data: dict[str, ...],
 	):
 		self.pos = pos
 		self.level = level
@@ -63,7 +63,7 @@ class WanderState(EntityState, Registrable):
 	def find_target(self):
 		random_target = (
 			self.pos.x + random.randint(*self.wander_range),
-			self.pos.y + random.randint(*self.wander_range)
+			self.pos.y + random.randint(*self.wander_range),
 		)
 
 		tile = self.level.get_tile(random_target)

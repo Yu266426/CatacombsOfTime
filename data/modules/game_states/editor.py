@@ -1,18 +1,23 @@
+from typing import TYPE_CHECKING
+
 import pygame
 import pygbase
 from pygbase.ui import *
 
 from data.modules.base.constants import FRAME_BACKGROUND_COLOR, SCREEN_HEIGHT, SCREEN_WIDTH
 from data.modules.editor.actions.editor_actions import EditorActionQueue
-from data.modules.editor.editor_selection_info import TileSelectionInfo, ObjectSelectionInfo
-from data.modules.editor.editor_states.editor_state import EditorState, EditorStates
+from data.modules.editor.editor_selection_info import ObjectSelectionInfo, TileSelectionInfo
+from data.modules.editor.editor_states.editor_state import EditorStates
 from data.modules.editor.editor_states.object_draw_state import ObjectDrawState
 from data.modules.editor.editor_states.object_selection_state import ObjectSelectionState
 from data.modules.editor.editor_states.tile_draw_state import TileDrawState
 from data.modules.editor.editor_states.tile_selection_state import TileSelectionState
 from data.modules.editor.shared_editor_state import SharedEditorState
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.level.room import EditorRoom
+
+if TYPE_CHECKING:
+	from data.modules.editor.editor_states.editor_state import EditorState
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.level.room import EditorRoom
 
 
 class Editor(pygbase.GameState, name="editor"):
@@ -34,7 +39,7 @@ class Editor(pygbase.GameState, name="editor"):
 			EditorStates.TILE_DRAW_STATE: TileDrawState(self.room, self.shared_state, self.action_queue, self.tile_selection_info),
 			EditorStates.TILE_SELECTION_STATE: TileSelectionState(self.room, self.shared_state, self.action_queue, self.tile_selection_info),
 			EditorStates.OBJECT_DRAW_STATE: ObjectDrawState(self.room, self.shared_state, self.action_queue, self.object_selection_info),
-			EditorStates.OBJECT_SELECTION_STATE: ObjectSelectionState(self.room, self.shared_state, self.action_queue, self.object_selection_info)
+			EditorStates.OBJECT_SELECTION_STATE: ObjectSelectionState(self.room, self.shared_state, self.action_queue, self.object_selection_info),
 		}
 
 		with Frame(size=(Grow(), Grow())) as self.ui:
@@ -46,7 +51,7 @@ class Editor(pygbase.GameState, name="editor"):
 				size=(400, Fit()),
 				bg_color=FRAME_BACKGROUND_COLOR,
 				can_interact=True,
-				blocks_mouse=True
+				blocks_mouse=True,
 			)
 
 		with Frame(size=(Grow(), Grow()), x_align=XAlign.CENTER, y_align=YAlign.CENTER) as self.overlay_ui:
@@ -54,9 +59,8 @@ class Editor(pygbase.GameState, name="editor"):
 				with Button(self.back_to_main_menu, size=(Grow(), Grow()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
 					with Image("images/button", size=(Grow(), Fit()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
 						Text("Back", 100, "white")
-				with Button(self.room.save):
-					with Image("images/button", size=(Grow(), Fit()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
-						Text("Save", 100, "white")
+				with Button(self.room.save), Image("images/button", size=(Grow(), Fit()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
+					Text("Save", 100, "white")
 
 				with Button(pygbase.Events.post_event, callback_args=(pygame.QUIT,), size=(Grow(), Grow()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
 					with Image("images/button", size=(Grow(), Fit()), x_align=XAlign.CENTER, y_align=YAlign.CENTER):

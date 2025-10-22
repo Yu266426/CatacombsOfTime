@@ -1,14 +1,23 @@
+from typing import TYPE_CHECKING
+
 import pygame
 import pygbase
 from pygbase.ui import *
 
-from data.modules.base.constants import FRAME_BACKGROUND_COLOR, EDITOR_BUTTON_FRAME_HEIGHT, EDITOR_BUTTON_FRAME_PADDING, EDITOR_BUTTON_FRAME_GAP
-from data.modules.editor.actions.editor_actions import EditorActionQueue
-from data.modules.editor.editor_selection_info import TileSelectionInfo
+from data.modules.base.constants import (
+	EDITOR_BUTTON_FRAME_GAP,
+	EDITOR_BUTTON_FRAME_HEIGHT,
+	EDITOR_BUTTON_FRAME_PADDING,
+	FRAME_BACKGROUND_COLOR,
+)
 from data.modules.editor.editor_states.editor_state import EditorState, EditorStates
 from data.modules.editor.screens.sprite_sheet_screen import SpriteSheetScreen
-from data.modules.editor.shared_editor_state import SharedEditorState
-from data.modules.level.room import EditorRoom
+
+if TYPE_CHECKING:
+	from data.modules.editor.actions.editor_actions import EditorActionQueue
+	from data.modules.editor.editor_selection_info import TileSelectionInfo
+	from data.modules.editor.shared_editor_state import SharedEditorState
+	from data.modules.level.room import EditorRoom
 
 
 class TileSelectionState(EditorState):
@@ -20,21 +29,20 @@ class TileSelectionState(EditorState):
 		self.sprite_sheet_index = 0
 		self.sprite_sheets: list[SpriteSheetScreen] = [
 			SpriteSheetScreen(self.tile_selection_info, "tiles"),
-			SpriteSheetScreen(self.tile_selection_info, "walls")
+			SpriteSheetScreen(self.tile_selection_info, "walls"),
 		]
 
-		with Frame(size=(Grow(), Grow()), y_align=YAlign.BOTTOM) as self.ui:
-			with Frame(
-					size=(Grow(), EDITOR_BUTTON_FRAME_HEIGHT),
-					padding=Padding.all(EDITOR_BUTTON_FRAME_PADDING),
-					gap=EDITOR_BUTTON_FRAME_GAP,
-					bg_color=FRAME_BACKGROUND_COLOR,
-					can_interact=True,
-					blocks_mouse=True
-			):
-				for i in range(len(self.sprite_sheets)):
-					with Button(self.switch_screen, (i,), size=(Fit(), Grow())):
-						Image("images/tile_set_button", size=(Fit(), Grow()))
+		with Frame(size=(Grow(), Grow()), y_align=YAlign.BOTTOM) as self.ui, Frame(
+				size=(Grow(), EDITOR_BUTTON_FRAME_HEIGHT),
+				padding=Padding.all(EDITOR_BUTTON_FRAME_PADDING),
+				gap=EDITOR_BUTTON_FRAME_GAP,
+				bg_color=FRAME_BACKGROUND_COLOR,
+				can_interact=True,
+				blocks_mouse=True,
+		):
+			for i in range(len(self.sprite_sheets)):
+				with Button(self.switch_screen, (i,), size=(Fit(), Grow())):
+					Image("images/tile_set_button", size=(Fit(), Grow()))
 
 	def switch_screen(self, new_index: int):
 		self.sprite_sheet_index = new_index
@@ -58,12 +66,12 @@ class TileSelectionState(EditorState):
 
 		self.ui.draw(screen)
 
-	def next_state(self, mode_index: int):
+	def next_state(self, mode_index: int) -> EditorStates | None:
 		if mode_index == 0:
 			if pygbase.Input.key_pressed(pygame.K_SPACE):
 				return EditorStates.TILE_SELECTION_STATE
-			else:
-				self.sprite_sheets[self.sprite_sheet_index].update_state()
-				return EditorStates.TILE_DRAW_STATE
-		elif mode_index == 1:
+			self.sprite_sheets[self.sprite_sheet_index].update_state()
+			return EditorStates.TILE_DRAW_STATE
+		if mode_index == 1:
 			return EditorStates.OBJECT_DRAW_STATE
+		return None

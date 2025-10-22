@@ -1,5 +1,5 @@
 import random
-from typing import TYPE_CHECKING, Any, Type
+from typing import TYPE_CHECKING, Any
 
 import pygame
 import pygbase.utils
@@ -26,22 +26,22 @@ class MeleeAttackStateData(RegistryData):
 		return {
 			"max_radius": 0.0,
 			"attack_cooldown": 0.0,
-			"attack_range": 0
+			"attack_range": 0,
 		}
 
 
 class MeleeAttackState(EntityState, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return MeleeAttackStateData
 
 	def __init__(
 			self,
 			pos: pygame.Vector2,
-			movement: "Movement",
-			entity_manager: "EntityManager",
-			item_slot: "ItemSlot",
-			data: dict[str, ...]
+			movement: Movement,
+			entity_manager: EntityManager,
+			item_slot: ItemSlot,
+			data: dict[str, ...],
 	):
 		self.pos = pos
 		self.movement = movement

@@ -1,21 +1,24 @@
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 import pygbase
-from data.modules.base.utils import to_scaled_sequence, to_scaled
 
+from data.modules.base.utils import to_scaled, to_scaled_sequence
 from data.modules.entities.attacks.fireball import Fireball
 from data.modules.entities.components.box_collider import BoxCollider
 from data.modules.entities.components.health import Health
 from data.modules.entities.components.interaction_controller import InteractionController
 from data.modules.entities.components.item_slot import ItemSlot
-from data.modules.entities.items.energy_sword import EnergySword
 from data.modules.entities.components.movement import Movement
 from data.modules.entities.entity import Entity
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.entities.models.humanoid_model import HumanoidModel
+from data.modules.entities.items.energy_sword import EnergySword
 from data.modules.entities.models.model_loader import ModelLoader
-from data.modules.level.level import Level
+
+if TYPE_CHECKING:
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.entities.models.humanoid_model import HumanoidModel
+	from data.modules.level.level import Level
 
 
 class Player(Entity, tags=("player",)):
@@ -85,7 +88,7 @@ class Player(Entity, tags=("player",)):
 				# TODO: Is NoQA really the answer?
 				if self.collider.collides_with(entity.collider):
 					# print(entity)
-					self.health.damage(entity.damage)  # NoQA
+					self.health.damage(entity.damage)
 
 					dir_vec = entity.pos - self.pos
 					if dir_vec.length() != 0:
@@ -120,7 +123,7 @@ class Player(Entity, tags=("player",)):
 				90,
 				10,
 				self.level,
-				self.entity_manager
+				self.entity_manager,
 			), tags=("from_player",))
 		# Debug end
 

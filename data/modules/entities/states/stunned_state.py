@@ -1,12 +1,14 @@
-from typing import Any, Type
+from typing import TYPE_CHECKING, Any
 
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
 from data.modules.base.registry.registry_data import RegistryData
-from data.modules.entities.components.movement import Movement
 from data.modules.entities.states.entity_state import EntityState
+
+if TYPE_CHECKING:
+	from data.modules.entities.components.movement import Movement
 
 
 class StunnedStateData(RegistryData):
@@ -17,13 +19,13 @@ class StunnedStateData(RegistryData):
 	@staticmethod
 	def get_required_components() -> dict[str, Any]:
 		return {
-			"time": 0.0
+			"time": 0.0,
 		}
 
 
 class StunnedState(EntityState, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return StunnedStateData
 
 	def __init__(self, pos: pygame.Vector2, movement: Movement, after_state: str, data: dict[str, ...]):

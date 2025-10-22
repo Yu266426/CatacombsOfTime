@@ -1,15 +1,20 @@
+from typing import TYPE_CHECKING
+
 import pygame
 import pygbase
 
 from data.modules.base.constants import TILE_SIZE
 from data.modules.base.utils import draw_rect_outline
-from data.modules.editor.actions.editor_actions import EditorActionBatch, EditorActionQueue
-from data.modules.editor.actions.object_actions import RemoveObjectAction, PlaceObjectAction
-from data.modules.editor.editor_selection_info import ObjectSelectionInfo
-from data.modules.editor.shared_editor_state import SharedEditorState
+from data.modules.editor.actions.editor_actions import EditorActionBatch
+from data.modules.editor.actions.object_actions import PlaceObjectAction, RemoveObjectAction
 from data.modules.editor.tools.editor_tool import EditorTool
-from data.modules.level.room import EditorRoom
 from data.modules.objects.object_loader import ObjectLoader
+
+if TYPE_CHECKING:
+	from data.modules.editor.actions.editor_actions import EditorActionQueue
+	from data.modules.editor.editor_selection_info import ObjectSelectionInfo
+	from data.modules.editor.shared_editor_state import SharedEditorState
+	from data.modules.level.room import EditorRoom
 
 
 class ObjectDrawTool(EditorTool):
@@ -63,7 +68,7 @@ class ObjectDrawTool(EditorTool):
 			surface, (255, 255, 255),
 			camera.world_to_screen((mouse_tile_pos[0] * TILE_SIZE, mouse_tile_pos[1] * TILE_SIZE)),
 			(TILE_SIZE, TILE_SIZE),
-			2
+			2,
 		)
 
 		# Draw selected object if not deleting

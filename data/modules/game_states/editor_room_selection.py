@@ -1,11 +1,10 @@
 import os
-from typing import Optional
 
 import pygame
 import pygbase
 from pygbase.ui import *
 
-from data.modules.base.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FRAME_BACKGROUND_COLOR
+from data.modules.base.constants import FRAME_BACKGROUND_COLOR, SCREEN_HEIGHT, SCREEN_WIDTH
 from data.modules.base.paths import ROOM_DIR
 from data.modules.entities.entity_manager import EntityManager
 from data.modules.game_states.editor import Editor
@@ -18,7 +17,7 @@ class EditorRoomSelection(pygbase.GameState, name="editor_room_select"):
 		super().__init__()
 
 		self.rooms = sorted(os.listdir(ROOM_DIR))
-		self.selected_room: Optional[EditorRoom] = None
+		self.selected_room: EditorRoom | None = None
 
 		self._make_ui()
 
@@ -32,7 +31,7 @@ class EditorRoomSelection(pygbase.GameState, name="editor_room_select"):
 						layout=Layout.TOP_TO_BOTTOM,
 						padding=Padding.all(5),
 						gap=5,
-						bg_color=FRAME_BACKGROUND_COLOR
+						bg_color=FRAME_BACKGROUND_COLOR,
 				):  # Room Selection
 					for index, room in enumerate(self.rooms):
 						room_name = room[:-5]

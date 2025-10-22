@@ -1,7 +1,6 @@
 import json
-import pathlib
+from typing import TYPE_CHECKING, ClassVar
 
-import pygame
 import pygbase
 
 from data.modules.base.paths import OBJECT_DIR
@@ -9,18 +8,23 @@ from data.modules.base.registry.loader import Loader
 from data.modules.base.registry.registry import Registry
 from data.modules.objects.base.game_object import GameObject
 
+if TYPE_CHECKING:
+	import pathlib
+
+	import pygame
+
 
 class ObjectLoader(Loader):
 	# object_name: (object_type, sprite, hitbox, behaviour, tags) for static and animated
 	# object_name: (object_type, object_class, tags) for custom
-	object_data: dict[str, tuple] = {}
+	object_data: ClassVar[dict[str, tuple]] = {}
 
 	@classmethod
 	def _get_dir(cls) -> pathlib.Path:
 		return OBJECT_DIR
 
 	@classmethod
-	def _init_file(cls, name: str, file_path: pathlib.Path):
+	def _init_file(cls, _name: str, file_path: pathlib.Path):
 		with open(file_path) as starter_file:
 			starter_data = json.load(starter_file)
 
@@ -46,7 +50,7 @@ class ObjectLoader(Loader):
 			raise ValueError(f"{file_path.name} has unsupported object type: {object_type_name}")
 
 	@classmethod
-	def _load(cls, name: str, file_path: pathlib.Path):
+	def _load(cls, _name: str, file_path: pathlib.Path):
 		with open(file_path) as file:
 			data = json.load(file)
 
@@ -76,7 +80,7 @@ class ObjectLoader(Loader):
 				pygbase.Resources.get_resource("sprite_sheets", sprite_sheet_name).get_image(data["image_index"]),
 				hitbox,
 				behaviour,
-				tags
+				tags,
 			)
 		elif object_type == "animated":
 			sprite_sheet_name = data["sprite_sheet"]
@@ -86,13 +90,13 @@ class ObjectLoader(Loader):
 				("sprite_sheets", sprite_sheet_name, data["animation_start_index"], data["animation_length"], data["animation_looping"]),
 				hitbox,
 				behaviour,
-				tags
+				tags,
 			)
 		elif object_type == "custom":
 			cls.object_data[data["name"]] = (
 				object_type,
 				Registry.get_type(data["name"]),
-				tags
+				tags,
 			)
 		else:
 			raise ValueError(f"{object_name} object file has invalid type <{type}>")
@@ -114,22 +118,21 @@ class ObjectLoader(Loader):
 				pos,
 				is_pixel,
 				object_data[1],  # Sprite
-				custom_hitbox=object_data[2]
+				custom_hitbox=object_data[2],
 			), object_data[4]
 
-		elif object_data[0] == "animated":
+		if object_data[0] == "animated":
 			return (GameObject(
 				name,
 				pos,
 				is_pixel,
 				pygbase.Animation(*object_data[1]),  # Animation data
-				custom_hitbox=object_data[2]
+				custom_hitbox=object_data[2],
 			), object_data[4])
 
-		elif object_data[0] == "custom":
+		if object_data[0] == "custom":
 			return object_data[1](pos, is_pixel), object_data[2]
-		else:
-			raise RuntimeError(f"Invalid object type for: {name}")
+		raise RuntimeError(f"Invalid object type for: {name}")
 
 # class ObjectLoader:
 # 	# object_name: (object_type, sprite, hitbox, behaviour, tags) for static and animated

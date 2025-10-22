@@ -1,8 +1,11 @@
 import json
 import logging
 import os
-import pathlib
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	import pathlib
 
 
 class Loader(ABC):
@@ -30,7 +33,7 @@ class Loader(ABC):
 			elif extension == "json":
 				cls._load(name, path)
 			else:
-				logging.warning(f"Non .start or .json file \"{file}\" found in {directory.name} directory")
+				logging.warning(f'Non .start or .json file "{file}" found in {directory.name} directory')
 
 	@classmethod
 	def _create_json_from_data(cls, name: str, file_path: pathlib.Path, data: dict):

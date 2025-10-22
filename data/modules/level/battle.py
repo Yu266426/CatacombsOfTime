@@ -2,16 +2,16 @@ import json
 from typing import TYPE_CHECKING
 
 from data.modules.base.paths import BATTLE_DIR
-from data.modules.entities.entity_manager import EntityManager
 from data.modules.level.enemy_wave import EnemyWave
 
 if TYPE_CHECKING:
+	from data.modules.entities.entity_manager import EntityManager
 	from data.modules.level.level import Level
 	from data.modules.level.room import Room
 
 
 class Battle:
-	def __init__(self, battle_name: str, level: "Level", room: "Room", entity_manager: EntityManager):
+	def __init__(self, battle_name: str, level: Level, room: Room, entity_manager: EntityManager):
 		self.level = level
 		self.entity_manager = entity_manager
 		self.room = room

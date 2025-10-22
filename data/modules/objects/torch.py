@@ -1,14 +1,16 @@
 import random
-from typing import Type
+from typing import TYPE_CHECKING
 
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
-from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
 from data.modules.objects.base.game_object import GameObject
 from data.modules.objects.base.game_object_data import GameObjectData
+
+if TYPE_CHECKING:
+	from data.modules.base.registry.registry_data import RegistryData
 
 
 class TorchData(GameObjectData):
@@ -19,7 +21,7 @@ class TorchData(GameObjectData):
 
 class Torch(GameObject, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return TorchData
 
 	def __init__(self, pos: tuple, use_pixel: bool):

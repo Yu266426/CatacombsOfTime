@@ -37,7 +37,7 @@ class TestState(pygbase.GameState, name="testing"):
 			self.line.collides_with(self.circle),
 			" |  line box:",
 			self.circle.collides_with(self.box),
-			self.box.collides_with(self.circle)
+			self.box.collides_with(self.circle),
 		)
 
 		if pygbase.Input.key_just_pressed(pygame.K_ESCAPE):

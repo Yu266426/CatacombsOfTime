@@ -1,5 +1,4 @@
 import pygame
-
 import pygbase
 from pygbase.ui import *
 
@@ -10,8 +9,8 @@ class MainMenu(pygbase.GameState, name="main_menu"):
 	def __init__(self):
 		super().__init__()
 
-		from data.modules.game_states.lobby import Lobby
 		from data.modules.game_states.editor_room_selection import EditorRoomSelection
+		from data.modules.game_states.lobby import Lobby
 		with Frame(size=(Grow(), Grow()), layout=Layout.TOP_TO_BOTTOM, padding=Padding.all(40)) as self.ui:
 			with Frame(size=(Grow(), Grow(2)), x_align=XAlign.CENTER, y_align=YAlign.CENTER):
 				Image("images/main_title", size=(650, Fit()))

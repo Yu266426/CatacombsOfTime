@@ -1,8 +1,13 @@
-import pygame
+from typing import TYPE_CHECKING
+
 import pygbase
 
-from data.modules.base.utils import draw_rect_outline, sort_tuple, get_tile_pos
-from data.modules.editor.editor_selection_info import TileSelectionInfo
+from data.modules.base.utils import draw_rect_outline, get_tile_pos, sort_tuple
+
+if TYPE_CHECKING:
+	import pygame
+
+	from data.modules.editor.editor_selection_info import TileSelectionInfo
 
 
 class SpriteSheetScreen(pygbase.CameraController):
@@ -76,8 +81,12 @@ class SpriteSheetScreen(pygbase.CameraController):
 		selected_topleft, selected_bottomright = sort_tuple(self.selected_topleft, self.selected_bottomright)
 
 		draw_rect_outline(
-			screen, (255, 255, 255),
+			screen,
+			(255, 255, 255),
 			(selected_topleft[0] * self.sprite_sheet.tile_width - self._camera.pos.x, selected_topleft[1] * self.sprite_sheet.tile_height - self._camera.pos.y),
-			(self.sprite_sheet.tile_width * (selected_bottomright[0] - selected_topleft[0] + 1), self.sprite_sheet.tile_height * (selected_bottomright[1] - selected_topleft[1] + 1)),
-			2
+			(
+				self.sprite_sheet.tile_width * (selected_bottomright[0] - selected_topleft[0] + 1),
+				self.sprite_sheet.tile_height * (selected_bottomright[1] - selected_topleft[1] + 1),
+			),
+			2,
 		)

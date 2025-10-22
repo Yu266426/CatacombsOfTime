@@ -1,7 +1,9 @@
+from ..base.tests import test
 from .rune import Rune
 from .runic_pattern import RunicPattern, RunicPatterns
 from .runic_sequence import RunicSequence
-from ..base.tests import test
+
+__all__ = ["Rune", "RunicPattern", "RunicPatterns", "RunicSequence"]
 
 
 def load():
@@ -40,6 +42,6 @@ def _test_sequence_insert_remove():
 	assert sequence.insert_rune(2, "air") == "water"
 	assert sequence.remove_rune(0) == "earth"
 
-	print("Sequence:", sequence._sequence)  # NoQA
+	print("Sequence:", sequence._sequence)
 
 	sequence.process()

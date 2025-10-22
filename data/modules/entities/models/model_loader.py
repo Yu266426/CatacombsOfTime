@@ -1,8 +1,6 @@
 import json
 import logging
-import pathlib
-
-import pygame.typing
+from typing import TYPE_CHECKING, ClassVar
 
 from data.modules.base.paths import MODEL_DIR
 from data.modules.base.registry.loader import Loader
@@ -10,10 +8,15 @@ from data.modules.base.registry.registry import Registry
 from data.modules.entities.models.character_model import CharacterModel
 from data.modules.entities.models.model_part import ModelPart
 
+if TYPE_CHECKING:
+	import pathlib
+
+	import pygame
+
 
 class ModelLoader(Loader):
 	# model_name: (model_type, model_data)
-	_model_data: dict[str, tuple[str, dict]] = {}
+	_model_data: ClassVar[dict[str, tuple[str, dict]]] = {}
 
 	@classmethod
 	def _get_dir(cls) -> pathlib.Path:
@@ -29,6 +32,7 @@ class ModelLoader(Loader):
 		# 2. Fill in the remaining data
 
 		model_type = starter_data["type"]
+		# TODO: Check proper arguments?
 		required_data = Registry.get_required_data(model_type, CharacterModel)
 
 		if "parts" not in starter_data:
@@ -70,7 +74,7 @@ class ModelLoader(Loader):
 
 		cls._model_data[name] = (
 			model_type,
-			data
+			data,
 		)
 
 	@classmethod
@@ -79,5 +83,5 @@ class ModelLoader(Loader):
 
 		return Registry.get_type(model_data[0])(
 			pos,
-			model_data[1]
+			model_data[1],
 		)

@@ -1,7 +1,11 @@
+from typing import TYPE_CHECKING
+
 import pygbase
 
 from data.modules.base.constants import TILE_SIZE
-from data.modules.level.room import EditorRoom
+
+if TYPE_CHECKING:
+	from data.modules.level.room import EditorRoom
 
 
 class SharedEditorState:

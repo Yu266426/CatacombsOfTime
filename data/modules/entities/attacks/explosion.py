@@ -13,7 +13,9 @@ class Explosion(Entity, tags=("damage",)):
 		self.damage = damage
 
 		self.particle_manager: pygbase.ParticleManager = pygbase.Common.get("particle_manager")
-		self.explosion_particles = self.particle_manager.add_spawner(pygbase.CircleSpawner(self.pos, 0.05, 150, radius, True, "fire", self.particle_manager, radial_velocity_range=(20, 400)))
+		self.explosion_particles = self.particle_manager.add_spawner(
+			pygbase.CircleSpawner(self.pos, 0.05, 150, radius, True, "fire", self.particle_manager, radial_velocity_range=(20, 400)),
+		)
 
 		self.lighting_manager: pygbase.LightingManager = pygbase.Common.get("lighting_manager")
 		self.light = self.lighting_manager.add_light(pygbase.Light(self.pos, 0.8, radius, radius / 8, 30, tint=(255, 0, 0)))

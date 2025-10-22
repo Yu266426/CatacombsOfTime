@@ -1,11 +1,13 @@
 import enum
-from abc import abstractmethod
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
-import pygame
+if TYPE_CHECKING:
+	import pygame
 
-from data.modules.level.room import EditorRoom
-from data.modules.editor.actions.editor_actions import EditorActionQueue
-from data.modules.editor.shared_editor_state import SharedEditorState
+	from data.modules.editor.actions.editor_actions import EditorActionQueue
+	from data.modules.editor.shared_editor_state import SharedEditorState
+	from data.modules.level.room import EditorRoom
 
 
 class EditorStates(enum.Enum):
@@ -15,7 +17,7 @@ class EditorStates(enum.Enum):
 	OBJECT_SELECTION_STATE = enum.auto()
 
 
-class EditorState:
+class EditorState(ABC):
 	def __init__(self, room: EditorRoom, shared_state: SharedEditorState, action_queue: EditorActionQueue):
 		self._room = room
 		self._action_queue = action_queue
@@ -30,5 +32,5 @@ class EditorState:
 		pass
 
 	@abstractmethod
-	def next_state(self, mode_index: int):
+	def next_state(self, mode_index: int) -> EditorStates | None:
 		pass

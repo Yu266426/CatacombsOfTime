@@ -43,4 +43,12 @@ class SwordSwing(Entity, tags=("damage",)):
 		else:
 			angle += 90 + 180
 
-		self.animation.draw_at_pos(surface, self.parent_pos + pygame.Vector2(0, -70) * self.flip, camera, angle, (-0, 70 * self.flip), flip=(False, self.flip == -1), draw_pos="midbottom")
+		self.animation.draw_at_pos(
+			surface,
+			self.parent_pos + pygame.Vector2(0, -70) * self.flip,
+			camera,
+			angle,
+			(-0, 70 * self.flip),
+			flip=(False, self.flip == -1),
+			draw_pos="midbottom",
+		)

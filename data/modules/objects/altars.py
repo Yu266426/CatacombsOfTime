@@ -1,14 +1,16 @@
-from typing import Type
+from typing import TYPE_CHECKING
 
 import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
-from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
-from data.modules.entities.entity import Entity
 from data.modules.objects.base.game_object import GameObject
 from data.modules.objects.base.game_object_data import GameObjectData
+
+if TYPE_CHECKING:
+	from data.modules.base.registry.registry_data import RegistryData
+	from data.modules.entities.entity import Entity
 
 
 class RuneAlterData(GameObjectData):
@@ -19,7 +21,7 @@ class RuneAlterData(GameObjectData):
 
 class RuneAltar(GameObject, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return RuneAlterData
 
 	def __init__(self, pos: tuple, use_pixel: bool):
@@ -44,7 +46,7 @@ class RuneAltar(GameObject, Registrable):
 
 		self.activate()
 
-	def interact(self, other: "Entity"):
+	def interact(self, _other: Entity):
 		if self.state == 0:
 			self.dialogue_manager.set_current_node("rune_altar_start")
 			self.state = 1

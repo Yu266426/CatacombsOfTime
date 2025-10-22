@@ -1,6 +1,5 @@
-from typing import Any, Type
+from typing import TYPE_CHECKING, Any
 
-import pygame
 import pygbase
 
 from data.modules.base.registry.registrable import Registrable
@@ -8,15 +7,18 @@ from data.modules.base.registry.registry_data import RegistryData
 from data.modules.base.utils import to_scaled
 from data.modules.entities.components.item_slot import ItemSlot
 from data.modules.entities.enemies.enemy import Enemy
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.entities.models.humanoid_model import HumanoidModel
 from data.modules.entities.models.model_loader import ModelLoader
-from data.modules.entities.states.entity_state import EntityState
 from data.modules.entities.states.entity_state_manager import EntityStateManager
 from data.modules.entities.states.melee_attack_state import MeleeAttackState
 from data.modules.entities.states.stunned_state import StunnedState
 from data.modules.entities.states.wander_state import WanderState
-from data.modules.level.level import Level
+
+if TYPE_CHECKING:
+	import pygame
+
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.entities.models.humanoid_model import HumanoidModel
+	from data.modules.level.level import Level
 
 
 class MeleeEnemyData(RegistryData):
@@ -30,13 +32,13 @@ class MeleeEnemyData(RegistryData):
 			"model": "",
 			"states": ["wander", "stunned", "melee_attack"],
 			"item_offset": [0, 0],
-			"weapon": ""
+			"weapon": "",
 		}
 
 
 class MeleeEnemy(Enemy, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return MeleeEnemyData
 
 	def __init__(
@@ -46,7 +48,7 @@ class MeleeEnemy(Enemy, Registrable):
 			entity_manager: EntityManager,
 			collider_size: tuple[int, int],
 			health: int,
-			data: dict[str, ...]
+			data: dict[str, ...],
 	):
 		Enemy.__init__(self, pos, level, entity_manager, collider_size, health, data)
 
@@ -59,7 +61,7 @@ class MeleeEnemy(Enemy, Registrable):
 		self.state_manager = EntityStateManager({
 			"wander": WanderState(self.pos, self.movement, level, self.entity_manager, self.model, state_data["wander"]),
 			"stunned": StunnedState(self.pos, self.movement, "wander", state_data["stunned"]),
-			"attack": MeleeAttackState(self.pos, self.movement, self.entity_manager, self.item_slot, state_data["melee_attack"])
+			"attack": MeleeAttackState(self.pos, self.movement, self.entity_manager, self.item_slot, state_data["melee_attack"]),
 		}, "wander")
 
 		self.player_pos = entity_manager.get_entities_of_tag("player")[0].pos

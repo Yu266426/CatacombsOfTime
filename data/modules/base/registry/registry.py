@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, ClassVar
 
 from data.modules.base.registry.registrable import Registrable
 from data.modules.base.registry.registry_data import RegistryData
@@ -6,7 +6,7 @@ from data.modules.base.registry.registry_data import RegistryData
 
 class Registry[T: Registrable | RegistryData]:
 	# name: (type, data)
-	_required_data: dict[str, tuple[type, dict[str, Any]]] = {}
+	_required_data: ClassVar[dict[str, tuple[type, dict[str, Any]]]] = {}
 
 	@classmethod
 	def register_type(cls, type_to_register: type[T]):

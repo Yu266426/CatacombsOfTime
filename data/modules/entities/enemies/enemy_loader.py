@@ -1,22 +1,26 @@
 import json
-import pathlib
-
-import pygame
+from typing import TYPE_CHECKING, ClassVar
 
 from data.modules.base.paths import ENEMY_DIR
 from data.modules.base.registry.loader import Loader
 from data.modules.base.registry.registry import Registry
 from data.modules.base.utils import to_scaled_sequence
-from data.modules.entities.enemies.enemy import Enemy
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.level.level import Level
+
+if TYPE_CHECKING:
+	import pathlib
+
+	import pygame
+
+	from data.modules.entities.enemies.enemy import Enemy
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.level.level import Level
 
 
 class EnemyLoader(Loader):
 	# enemy_name: (enemy_type, health, hitbox, dict[animations, states])
 	# animations: {animation_name: (sprite_sheet, start_index, length, speed)}
 	# states: {state_name: (depends on state)}
-	_enemy_data: dict[str, tuple[str, int, tuple[int, int], dict[str, ...]]] = {}
+	_enemy_data: ClassVar[dict[str, tuple[str, int, tuple[int, int], dict[str, ...]]]] = {}
 
 	@classmethod
 	def _get_dir(cls) -> pathlib.Path:
@@ -79,11 +83,11 @@ class EnemyLoader(Loader):
 			enemy_type,
 			health,
 			hitbox,
-			enemy_data
+			enemy_data,
 		)
 
 	@classmethod
-	def create_enemy(cls, enemy_name: str, pos: pygame.typing.Point, level: Level, entity_manager: EntityManager) -> "Enemy":
+	def create_enemy(cls, enemy_name: str, pos: pygame.typing.Point, level: Level, entity_manager: EntityManager) -> Enemy:
 		enemy_data = cls._enemy_data[enemy_name]
 		data_dict = enemy_data[3].copy()
 
@@ -96,5 +100,5 @@ class EnemyLoader(Loader):
 			entity_manager,
 			enemy_data[2],  # Hitbox
 			enemy_data[1],  # Health,
-			data_dict  # Data
+			data_dict,  # Data
 		)

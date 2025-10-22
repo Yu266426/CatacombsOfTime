@@ -1,8 +1,8 @@
-from typing import Self
+from typing import ClassVar, Self
 
 
 class Rune:
-	runes: dict[str, Self] = {}
+	runes: ClassVar[dict[str, Self]] = {}
 
 	def __init__(self, name: str):
 		self.name = name

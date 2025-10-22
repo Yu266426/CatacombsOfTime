@@ -1,6 +1,10 @@
-from data.modules.level.room import EditorRoom
+from typing import TYPE_CHECKING
+
 from data.modules.editor.actions.editor_actions import EditorAction
-from data.modules.objects.base.game_object import GameObject
+
+if TYPE_CHECKING:
+	from data.modules.level.room import EditorRoom
+	from data.modules.objects.base.game_object import GameObject
 
 
 class PlaceObjectAction(EditorAction):

@@ -1,9 +1,13 @@
+from typing import TYPE_CHECKING
+
 import pygame
 import pygbase
 
-from data.modules.base.utils import to_scaled_sequence, to_scaled
+from data.modules.base.utils import to_scaled, to_scaled_sequence
 from data.modules.entities.entity import Entity
-from data.modules.entities.entity_manager import EntityManager
+
+if TYPE_CHECKING:
+	from data.modules.entities.entity_manager import EntityManager
 
 
 class EntitySpawn(Entity):

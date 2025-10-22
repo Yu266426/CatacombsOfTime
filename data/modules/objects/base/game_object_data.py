@@ -13,5 +13,5 @@ class GameObjectData(RegistryData):
 		return {
 			"hitbox": [0, 0],
 			"behaviors": [],
-			"tags": []
+			"tags": [],
 		}

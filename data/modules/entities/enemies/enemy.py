@@ -1,15 +1,18 @@
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 import pygbase
-from data.modules.base.utils import to_scaled
 
+from data.modules.base.utils import to_scaled
 from data.modules.entities.components.box_collider import BoxCollider
 from data.modules.entities.components.health import Health
 from data.modules.entities.components.movement import Movement
 from data.modules.entities.entity import Entity
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.level.level import Level
+
+if TYPE_CHECKING:
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.level.level import Level
 
 
 class Enemy(Entity, tags=("enemy",)):
@@ -20,7 +23,7 @@ class Enemy(Entity, tags=("enemy",)):
 			entity_manager: EntityManager,
 			collider_size: tuple[int, int],
 			health: int,
-			data: dict[str, ...]  # NoQA: Used by subclasses
+			data: dict[str, ...],  # NoQA: Used by subclasses
 	):
 		super().__init__(pos)
 
@@ -45,9 +48,9 @@ class Enemy(Entity, tags=("enemy",)):
 				if "from_enemy" in entity.entity_tags:
 					continue
 
-				if self.collider.collides_with(entity.collider):  # NoQA
+				if self.collider.collides_with(entity.collider):
 					# print(entity)
-					self.health.damage(entity.damage)  # NoQA
+					self.health.damage(entity.damage)
 
 					dir_vec = entity.pos - self.pos
 					if dir_vec.length() != 0:

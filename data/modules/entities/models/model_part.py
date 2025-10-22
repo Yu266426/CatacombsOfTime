@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any
 
 import pygame.typing
 import pygbase
@@ -26,13 +26,13 @@ class ImageModelPartData(RegistryData):
 			"offset": [0, 0],
 			"pivot": [0, 0],
 			"parent": "",
-			"layer": 0
+			"layer": 0,
 		}
 
 
 class ImageModelPart(ModelPart, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return ImageModelPartData
 
 	def __init__(self, parent_pos: pygame.Vector2, data: dict):
@@ -56,4 +56,11 @@ class ImageModelPart(ModelPart, Registrable):
 		self.pos.update(self._parent_pos + self.offset * PIXEL_SCALE)
 
 	def draw(self, surface: pygame.Surface, camera: pygbase.Camera):
-		self._image.draw(surface, camera.world_to_screen(self._parent_pos + (self.offset + self.part_offset) * PIXEL_SCALE), self.angle, pivot_point=self._pivot, flip=(self.flipped, False), draw_pos="center")
+		self._image.draw(
+			surface,
+			camera.world_to_screen(self._parent_pos + (self.offset + self.part_offset) * PIXEL_SCALE),
+			self.angle,
+			pivot_point=self._pivot,
+			flip=(self.flipped, False),
+			draw_pos="center",
+		)

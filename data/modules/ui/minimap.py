@@ -1,10 +1,12 @@
 import math
+from typing import TYPE_CHECKING, Self
 
 import pygame
-from typing_extensions import Self
 
 from data.modules.base.constants import TILE_SIZE
-from data.modules.level.level import LevelGenerator
+
+if TYPE_CHECKING:
+	from data.modules.level.level import LevelGenerator
 
 
 class Minimap:
@@ -15,11 +17,11 @@ class Minimap:
 		self.room_separation = room_separation
 		self.draw_offset = (
 			size[0] / 2,
-			size[1] / 2
+			size[1] / 2,
 		)
 		self.show_room_radius = (
 			int(size[0] / (room_display_size + room_separation)),
-			int(size[1] / (room_display_size + room_separation))
+			int(size[1] / (room_display_size + room_separation)),
 		)
 
 		self.surface = pygame.Surface(size, flags=pygame.SRCALPHA)
@@ -74,7 +76,7 @@ class Minimap:
 			offset_room_pos = (room_pos[0] - current_room_pos.x), (room_pos[1] - current_room_pos.y)
 			display_room_pos = (
 				offset_room_pos[0] * self.room_display_size + (offset_room_pos[0] + 0.5) * self.room_separation + self.draw_offset[0],
-				offset_room_pos[1] * self.room_display_size + (offset_room_pos[1] + 0.5) * self.room_separation + self.draw_offset[1]
+				offset_room_pos[1] * self.room_display_size + (offset_room_pos[1] + 0.5) * self.room_separation + self.draw_offset[1],
 			)
 
 			room_center = display_room_pos[0] + self.room_display_size / 2, display_room_pos[1] + self.room_display_size / 2
@@ -86,9 +88,9 @@ class Minimap:
 					room_center,
 					(
 						room_center[0] + connection[0] * self.room_display_size,
-						room_center[1] + connection[1] * self.room_display_size
+						room_center[1] + connection[1] * self.room_display_size,
 					),
-					10
+					10,
 				)
 
 			pygame.draw.rect(
@@ -98,8 +100,8 @@ class Minimap:
 					display_room_pos,
 					(
 						self.room_display_size,
-						self.room_display_size
-					)
+						self.room_display_size,
+					),
 				),
 
 			)

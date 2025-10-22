@@ -1,9 +1,14 @@
-import pygame
+from typing import TYPE_CHECKING
+
 import pygbase
+
 from data.modules.base.utils import to_scaled
 
-from data.modules.entities.entity import Entity
-from data.modules.entities.entity_manager import EntityManager
+if TYPE_CHECKING:
+	import pygame
+
+	from data.modules.entities.entity import Entity
+	from data.modules.entities.entity_manager import EntityManager
 
 
 class InteractionController:

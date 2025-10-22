@@ -1,11 +1,16 @@
 import math
+from typing import TYPE_CHECKING
 
-import pygame
 import pygbase
 
 from data.modules.base.utils import draw_rect_outline, get_tile_pos
-from data.modules.editor.editor_selection_info import ObjectSelectionInfo
-from data.modules.objects.object_loader import GameObject, ObjectLoader
+from data.modules.objects.object_loader import ObjectLoader
+
+if TYPE_CHECKING:
+	import pygame
+
+	from data.modules.editor.editor_selection_info import ObjectSelectionInfo
+	from data.modules.objects.object_loader import GameObject
 
 
 class ObjectSelectionScreen(pygbase.CameraController):
@@ -59,10 +64,14 @@ class ObjectSelectionScreen(pygbase.CameraController):
 			game_object.draw(display, self._camera)
 
 		draw_rect_outline(
-			display, (255, 255, 255),
-			((self.selected_object_index % self.n_cols) * self.object_size[0] - self._camera.pos.x, (self.selected_object_index // self.n_cols) * self.object_size[1] - self._camera.pos.y),
+			display,
+			(255, 255, 255),
+			(
+				(self.selected_object_index % self.n_cols) * self.object_size[0] - self._camera.pos.x,
+				(self.selected_object_index // self.n_cols) * self.object_size[1] - self._camera.pos.y,
+			),
 			self.object_size,
-			2
+			2,
 		)
 
 		draw_rect_outline(display, "yellow", self._camera.world_to_screen((self.keep_in[0], self.keep_in[1])), (self.keep_in[2], self.keep_in[3]), 1)

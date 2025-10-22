@@ -1,14 +1,22 @@
+from typing import TYPE_CHECKING
+
 import pygame
 import pygbase
 
 from data.modules.entities.attacks.explosion import Explosion
 from data.modules.entities.entity import Entity
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.level.level import Level
+
+if TYPE_CHECKING:
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.level.level import Level
 
 
 class Fireball(Entity):
-	def __init__(self, pos, direction: float, speed: float, projectile_range: float, radius: float, explosion_radius: float, damage: float, level: Level, entity_manager: EntityManager):
+	def __init__(
+			self,
+			pos, direction: float, speed: float, projectile_range: float, radius: float,
+			explosion_radius: float, damage: float, level: Level, entity_manager: EntityManager,
+	):
 		super().__init__(pos)
 		self.alive = True
 
@@ -36,7 +44,7 @@ class Fireball(Entity):
 				spawn_velocity=self.movement / 4,
 				radial_velocity_range=(-30, 80),
 				# linear_velocity_range=((0, self.movement.x / 4), (0, self.movement.y / 4))
-			)
+			),
 		)
 
 		self.lighting_manager = pygbase.Common.get("lighting_manager")

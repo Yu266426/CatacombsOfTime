@@ -1,4 +1,7 @@
-from data.modules.entities.states.entity_state import EntityState
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from data.modules.entities.states.entity_state import EntityState
 
 
 class EntityStateManager:

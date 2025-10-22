@@ -14,7 +14,7 @@ class AnimationData(RegistryData):
 			"sprite_sheet": "",
 			"start_index": 0,
 			"length": 0,
-			"speed": 0
+			"speed": 0,
 		}
 
 

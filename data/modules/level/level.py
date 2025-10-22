@@ -4,16 +4,19 @@ import logging
 import os
 import random
 from collections import deque
+from typing import TYPE_CHECKING
 
 import pygame
 import pygbase
 
-from data.modules.base.constants import TILE_SIZE, SCREEN_WIDTH, SCREEN_HEIGHT
-from data.modules.base.paths import ROOM_DIR, BATTLE_DIR
+from data.modules.base.constants import SCREEN_HEIGHT, SCREEN_WIDTH, TILE_SIZE
+from data.modules.base.paths import BATTLE_DIR, ROOM_DIR
 from data.modules.base.utils import get_tile_pos, one_if_even
-from data.modules.entities.entity_manager import EntityManager
-from data.modules.level.room import Room, Hallway
-from data.modules.level.tile import Tile
+from data.modules.level.room import Hallway, Room
+
+if TYPE_CHECKING:
+	from data.modules.entities.entity_manager import EntityManager
+	from data.modules.level.tile import Tile
 
 
 class Level:
@@ -82,8 +85,8 @@ class Level:
 			self, self.wall_gap_radius,
 			offset=(
 				room_pos[0] * self.room_separation,
-				room_pos[1] * self.room_separation
-			)
+				room_pos[1] * self.room_separation,
+			),
 		)
 
 		self.rooms[room_pos] = room
@@ -93,14 +96,14 @@ class Level:
 	def add_room_ex(self, room_pos: tuple[int, int], room_name: str, connections: tuple[bool, bool, bool, bool], battle_name: str, room_data: dict):
 		offset = (
 			(self.room_separation - room_data["cols"]) // 2,
-			(self.room_separation - room_data["rows"]) // 2
+			(self.room_separation - room_data["rows"]) // 2,
 		)
 
 		odd_sep_offset = (0, 0)
 		if self.room_separation % 2 != 0:
 			odd_sep_offset = (
 				one_if_even(room_data["cols"]),
-				one_if_even(room_data["rows"])
+				one_if_even(room_data["rows"]),
 			)
 
 		room = Room(
@@ -110,9 +113,9 @@ class Level:
 			self, self.wall_gap_radius,
 			offset=(
 				room_pos[0] * self.room_separation + offset[0] + odd_sep_offset[0],
-				room_pos[1] * self.room_separation + offset[1] + odd_sep_offset[1]
+				room_pos[1] * self.room_separation + offset[1] + odd_sep_offset[1],
 			),
-			connections=connections
+			connections=connections,
 		)
 
 		self.rooms[room_pos] = room
@@ -131,7 +134,7 @@ class Level:
 		# logging.debug(f"{room_pos} {room.n_cols, room.n_rows} -> {connected_room_pos} {connecting_room.n_cols, connecting_room.n_rows}:")
 		# logging.debug(f"{room.tile_offset} | {connecting_room.tile_offset}")
 		# logging.debug(f"{room.left_hallway_pos}, {room.right_hallway_pos}, {room.top_hallway_pos}, {room.bottom_hallway_pos}")
-		# logging.debug(f"{connecting_room.left_hallway_pos}, {connecting_room.right_hallway_pos}, {connecting_room.top_hallway_pos}, {connecting_room.bottom_hallway_pos}")
+		# logging.debug(f"{connecting_room.left_hallway_pos},	{connecting_room.right_hallway_pos}, {connecting_room.top_hallway_pos}, {connecting_room.bottom_hallway_pos}")  # noqa: E501
 
 		# Horizontal connection
 		if room_pos[1] == connected_room_pos[1]:
@@ -142,7 +145,7 @@ class Level:
 				width = room.left_hallway_pos[0] - connecting_room.right_hallway_pos[0] - 1
 				offset = (
 					connecting_room.right_hallway_pos[0] + 1,
-					connecting_room.right_hallway_pos[1] - 1
+					connecting_room.right_hallway_pos[1] - 1,
 				)
 				# logging.debug(f"Spawning left hallway size {width}, {wall_gap} at {offset}")
 				Hallway(
@@ -150,7 +153,7 @@ class Level:
 					wall_gap + 2,
 					width,
 					True,
-					offset
+					offset,
 				).populate_tiles()
 
 			# Right
@@ -158,7 +161,7 @@ class Level:
 				width = connecting_room.left_hallway_pos[0] - room.right_hallway_pos[0] - 1
 				offset = (
 					room.right_hallway_pos[0] + 1,
-					room.right_hallway_pos[1] - 1
+					room.right_hallway_pos[1] - 1,
 				)
 				# logging.debug(f"Spawning right hallway size {width}, {wall_gap} at {offset}")
 				Hallway(
@@ -166,7 +169,7 @@ class Level:
 					wall_gap + 2,
 					width,
 					True,
-					offset
+					offset,
 				).populate_tiles()
 
 		# Vertical Connection
@@ -178,7 +181,7 @@ class Level:
 				height = room.top_hallway_pos[1] - connecting_room.bottom_hallway_pos[1] - 1
 				offset = (
 					connecting_room.bottom_hallway_pos[0] - 1,
-					connecting_room.bottom_hallway_pos[1] + 1
+					connecting_room.bottom_hallway_pos[1] + 1,
 				)
 				# logging.debug(f"Spawning top hallway size {height}, {wall_gap} at {offset}")
 				Hallway(
@@ -186,7 +189,7 @@ class Level:
 					height,
 					wall_gap + 2,
 					False,
-					offset
+					offset,
 				).populate_tiles()
 
 			# Bottom
@@ -194,7 +197,7 @@ class Level:
 				height = connecting_room.top_hallway_pos[1] - room.bottom_hallway_pos[1] - 1
 				offset = (
 					room.bottom_hallway_pos[0] - 1,
-					room.bottom_hallway_pos[1] + 1
+					room.bottom_hallway_pos[1] + 1,
 				)
 				# logging.debug(f"Spawning bottom hallway size {height}, {wall_gap} at {offset}")
 				Hallway(
@@ -202,7 +205,7 @@ class Level:
 					height,
 					wall_gap + 2,
 					False,
-					offset
+					offset,
 				).populate_tiles()
 
 	def get_room(self, pos: tuple[float, float] | pygame.Vector2) -> Room | None:
@@ -233,7 +236,11 @@ class Level:
 			self.prev_player_room_pos = player_room_pos
 
 			current_room.entered()
-		elif self.prev_player_room_pos != player_room_pos and 1 <= player_room_tile_pos[0] < current_room.n_cols - 1 and 1 <= player_room_tile_pos[1] < current_room.n_rows - 1:
+		elif (
+			self.prev_player_room_pos != player_room_pos
+			and 1 <= player_room_tile_pos[0] < current_room.n_cols - 1
+			and 1 <= player_room_tile_pos[1] < current_room.n_rows - 1
+		):
 			current_room.entered()
 			self.get_room_from_room_pos(self.prev_player_room_pos).exited()
 
@@ -290,7 +297,7 @@ class LevelGenerator:
 		self.battle_names: list[str] = []
 		self._load_battle_data()
 
-		## Room graph
+		# Room graph
 		# Room positions
 		self.rooms_to_generate: set[tuple[int, int]] = set()
 		# Room position -> connect room positions
@@ -366,7 +373,7 @@ class LevelGenerator:
 			(1, 0),
 			(-1, 0),
 			(0, 1),
-			(0, -1)
+			(0, -1),
 		]
 
 		# Room generation
@@ -431,7 +438,7 @@ class LevelGenerator:
 					room_pos, room_name,
 					room_connections,
 					random.choice(self.battle_names),
-					self.rooms[room_name]
+					self.rooms[room_name],
 				)
 			else:
 				if room_pos not in rooms_added:
@@ -474,7 +481,7 @@ class LevelGenerator:
 					room_pos,
 					connection,
 					self.level.get_room_from_room_pos(room_pos),
-					self.level.get_room_from_room_pos(connection)
+					self.level.get_room_from_room_pos(connection),
 				)
 
 	# TODO: Redo generation to be over multiple frames

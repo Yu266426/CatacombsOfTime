@@ -1,12 +1,16 @@
+from typing import TYPE_CHECKING
+
 import pygame
 import pygbase
 
-from data.modules.base.constants import SCREEN_WIDTH, SCREEN_HEIGHT, TILE_SIZE
-from data.modules.base.profiler import profile
+from data.modules.base.constants import SCREEN_HEIGHT, SCREEN_WIDTH, TILE_SIZE
 from data.modules.entities.entity_manager import EntityManager
 from data.modules.entities.player import Player
-from data.modules.level.level import Level, LevelGenerator
+from data.modules.level.level import LevelGenerator
 from data.modules.ui.minimap import Minimap
+
+if TYPE_CHECKING:
+	from data.modules.level.level import Level
 
 
 class Game(pygbase.GameState, name="game"):
@@ -25,13 +29,13 @@ class Game(pygbase.GameState, name="game"):
 		self.player = Player(((int(room_separation / 2) + 0.5) * TILE_SIZE, room_separation / 2 * TILE_SIZE), self.camera, self.entity_manager, self.level)
 		self.entity_manager.add_entity(self.player)
 
-		self.camera.set_pos(self.player.pos + (-SCREEN_WIDTH / 2, -SCREEN_HEIGHT / 2))
+		self.camera.set_pos(self.player.pos + pygame.Vector2(-SCREEN_WIDTH / 2, -SCREEN_HEIGHT / 2))
 
 		self.minimap = Minimap(
 			(SCREEN_WIDTH - 300, 0),
 			(300, 300),
 			50,
-			15
+			15,
 		).init(level_generator)
 		self.minimap.update_pos(self.player.pos)
 
@@ -56,7 +60,7 @@ class Game(pygbase.GameState, name="game"):
 			self.player.collider.rect.center
 			- pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 			+ self.player.movement.velocity * 0.06
-			, 8 * (delta ** 0.95)
+			, 8 * (delta ** 0.95),
 		)
 		# self.camera.set_pos(
 		# 	self.player.collider.rect.center

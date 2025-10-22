@@ -7,7 +7,7 @@ class CircleCollider:
 
 		self.radius = radius
 
-	def link_pos(self, pos: pygame.Vector2) -> "CircleCollider":
+	def link_pos(self, pos: pygame.Vector2) -> CircleCollider:
 		self.pos = pos
 		return self
 
@@ -18,22 +18,25 @@ class CircleCollider:
 		if isinstance(collider, BoxCollider):
 			closest_point = pygame.Vector2(
 				max(collider.rect.left, min(self.pos.x, collider.rect.right)),
-				max(collider.rect.top, min(self.pos.y, collider.rect.bottom))
+				max(collider.rect.top, min(self.pos.y, collider.rect.bottom)),
 			)
 
 			return closest_point.distance_to(self.pos) < self.radius
 
-		elif isinstance(collider, LineCollider):
+		if isinstance(collider, LineCollider):
 			if collider.start_pos.distance_to(self.pos) < self.radius:
 				return True
 			if collider.end_pos.distance_to(self.pos) < self.radius:
 				return True
 
-			dot = ((self.pos.x - collider.start_pos.x) * (collider.end_pos.x - collider.start_pos.x) + (self.pos.y - collider.start_pos.y) * (collider.end_pos.y - collider.start_pos.y)) / collider.length ** 2
+			dot = (
+					(self.pos.x - collider.start_pos.x) * (collider.end_pos.x - collider.start_pos.x)
+					+ (self.pos.y - collider.start_pos.y) * (collider.end_pos.y - collider.start_pos.y)
+				) / collider.length ** 2
 
 			closest_point = pygame.Vector2(
 				collider.start_pos.x + dot * (collider.end_pos.x - collider.start_pos.x),
-				collider.start_pos.y + dot * (collider.end_pos.y - collider.start_pos.y)
+				collider.start_pos.y + dot * (collider.end_pos.y - collider.start_pos.y),
 			)
 
 			if not collider.point_within_line_segment(closest_point):
@@ -41,5 +44,7 @@ class CircleCollider:
 
 			return closest_point.distance_to(self.pos) < self.radius
 
-		elif isinstance(collider, CircleCollider):
+		if isinstance(collider, CircleCollider):
 			return collider.pos.distance_to(self.pos) < collider.radius + self.radius
+
+		return False

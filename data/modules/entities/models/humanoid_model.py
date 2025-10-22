@@ -1,5 +1,5 @@
 import math
-from typing import Literal, Any, Type
+from typing import Any, Literal
 
 import pygame
 import pygbase
@@ -23,7 +23,7 @@ class HumanoidModelData(RegistryData):
 
 class HumanoidModel(CharacterModel, Registrable):
 	@staticmethod
-	def get_registry_data() -> Type[RegistryData]:
+	def get_registry_data() -> type[RegistryData]:
 		return HumanoidModelData
 
 	def __init__(self, pos: pygame.Vector2, data: dict):

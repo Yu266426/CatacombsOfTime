@@ -1,8 +1,11 @@
 from collections import defaultdict
+from typing import TYPE_CHECKING
 
 from data.modules.base.constants import TILE_SIZE
 from data.modules.base.utils import get_1d_tile_pos
-from data.modules.entities.entity import Entity
+
+if TYPE_CHECKING:
+	from data.modules.entities.entity import Entity
 
 
 class EntityManager:
@@ -26,7 +29,7 @@ class EntityManager:
 		self.entities.clear()
 		self.sorted_entities.clear()
 
-	def add_entity(self, entity: "Entity", tags: tuple[str, ...] | None = None):
+	def add_entity(self, entity: Entity, tags: tuple[str, ...] | None = None):
 		self.entities.append(entity)
 		entity.added()
 

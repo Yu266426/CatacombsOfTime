@@ -1,7 +1,7 @@
 import pygame
 import pygbase
 
-from data.modules.base.constants import SCREEN_WIDTH, SCREEN_HEIGHT, TILE_SIZE
+from data.modules.base.constants import SCREEN_HEIGHT, SCREEN_WIDTH, TILE_SIZE
 from data.modules.entities.entity_manager import EntityManager
 from data.modules.entities.player import Player
 from data.modules.level.level import Level
@@ -35,7 +35,7 @@ class Lobby(pygbase.GameState, name="lobby"):
 
 		pygbase.Events.remove_handler(self.start_game_callback, "lobby", "start_game")
 
-	def start_game_callback(self, event: pygame.Event):
+	def start_game_callback(self, _event: pygame.Event):
 		from data.modules.game_states.game import Game
 		self.set_next_state(Game())
 
